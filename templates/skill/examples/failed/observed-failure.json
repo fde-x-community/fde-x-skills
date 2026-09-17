@@ -1,0 +1,9 @@
+{
+  "case_id": "failed-observed-failure",
+  "observed_failure": "Replace with a failure that was actually observed, not invented.",
+  "cause": "Replace with the diagnosed cause.",
+  "repair": "Replace with the change that fixed it.",
+  "regression_case": "tests/scenario-matrix.json#regression",
+  "prohibited_recurrence": "Replace with what must never happen again.",
+  "status": "not_run"
+}

@@ -1,0 +1,8 @@
+{
+  "case_id": "golden-basic",
+  "input_class": "Replace with the representative happy-path input class.",
+  "input": { "raw_input": "Replace with a non-sensitive representative input." },
+  "expected_behavior": "Replace with what an expert reviewer expects the skill to do.",
+  "acceptance_evidence": "Replace with how a reviewer confirms the behavior without trusting author text.",
+  "status": "not_run"
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "${skill_name}/input.schema.json",
+  "title": "${skill_name} input contract",
+  "type": "object",
+  "required": ["raw_input"],
+  "additionalProperties": false,
+  "properties": {
+    "raw_input": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Replace with the real input contract for this skill."
+    }
+  }
+}

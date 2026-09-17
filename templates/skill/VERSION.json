@@ -1,0 +1,37 @@
+{
+  "schema_version": "skill_release_v2",
+  "skill_name": "${skill_name}",
+  "version": "0.1.0",
+  "release_date": "${created_date}",
+  "status": "draft",
+  "author": "${author}",
+  "reviewer": "",
+  "review_basis": "",
+  "anatomy_version": "strict_full_v1",
+  "source_episode": "",
+  "design_basis": [],
+  "validation": {
+    "evidence_policy": "This descriptive block is not release evidence; an external content-addressed release manifest is authoritative.",
+    "release_evidence": ""
+  },
+  "evaluation_sets": {
+    "trigger": "tests/scenario-matrix.json#trigger",
+    "non_trigger": "tests/scenario-matrix.json#non_trigger",
+    "quality": "tests/scenario-matrix.json#quality",
+    "safety": "tests/scenario-matrix.json#safety",
+    "regression": "tests/scenario-matrix.json#regression",
+    "end_to_end": "tests/scenario-matrix.json#end_to_end"
+  },
+  "approved_rules": [],
+  "breaking_changes": [],
+  "artifact_maturity": "draft",
+  "change_request_state": "not_created",
+  "release_state": "not_created",
+  "deployment_state": "not_created",
+  "rollback_to": "",
+  "rollback_snapshot": "",
+  "rollback_manifest": "",
+  "known_limits": [
+    "Draft package: no release evidence has been independently re-read."
+  ]
+}

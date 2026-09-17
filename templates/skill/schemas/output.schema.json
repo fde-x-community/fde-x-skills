@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "${skill_name}/output.schema.json",
+  "title": "${skill_name} output contract",
+  "type": "object",
+  "required": ["result", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "result": {
+      "type": "string",
+      "description": "Replace with the real deliverable contract for this skill."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pass", "fail", "partial", "blocked", "not_run", "not_in_scope"]
+    }
+  }
+}

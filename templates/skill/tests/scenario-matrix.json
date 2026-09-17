@@ -1,0 +1,5 @@
+{
+  "schema_version": "skill_eval_matrix_v2",
+  "skill_name": "${skill_name}",
+  "cases": []
+}

@@ -1,0 +1,32 @@
+name: validate
+
+# 这里跑的每一步都是贡献者能在本地用同一条命令复现的。CI 不引入额外规则。
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # 结构守门。失败信息直接给出修正方法。
+      - name: 结构校验
+        run: node scripts/validate.mjs
+
+      # 每个 skill 自己的回归测试。
+      - name: 回归测试
+        run: node scripts/test-all.mjs
+
+      # README 索引由脚本生成,贡献者不得手改。
+      - name: README 索引漂移检查
+        run: node scripts/build-index.mjs --check

@@ -1,0 +1,7 @@
+interface:
+  display_name: "${display_name}"
+  short_description: "${short_description}"
+  default_prompt: "使用 $${skill_name} 完成 <一句话说明这个 skill 负责什么>。"
+
+policy:
+  allow_implicit_invocation: true

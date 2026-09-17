@@ -1,0 +1,66 @@
+name: 提议一个新 skill
+description: 还没开始写,先讨论这个 skill 该不该存在、边界在哪
+title: "[skill] "
+labels: ["proposal"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        写之前先搜一下 `skills/` 里有没有已经覆盖这件事的。重复的能力应该扩展已有的 skill,
+        而不是新建一个——使用者只会被两个相似的 skill 搞糊涂。
+
+  - type: input
+    id: name
+    attributes:
+      label: 建议的 skill 名
+      description: kebab-case,只允许小写字母、数字和单个连字符
+      placeholder: pdf-table-extractor
+    validations:
+      required: true
+
+  - type: textarea
+    id: trigger
+    attributes:
+      label: 什么时候应该触发它
+      description: 给出两三个真实的用户说法。这些会直接变成 description 和触发测试用例。
+      placeholder: |
+        - "把这个 PDF 里的表格导成 CSV"
+        - "这份扫描件里的表格能提取出来吗"
+    validations:
+      required: true
+
+  - type: textarea
+    id: deliverable
+    attributes:
+      label: 交付什么
+      description: 产出物是什么形态,使用者拿到之后会做什么
+    validations:
+      required: true
+
+  - type: textarea
+    id: non_trigger
+    attributes:
+      label: 什么情况下【不】应该触发
+      description: 举出相邻但应当路由到别处的请求。非触发用例和触发用例同样重要。
+    validations:
+      required: true
+
+  - type: textarea
+    id: safety
+    attributes:
+      label: 有没有会真正执行代码或产生副作用的部分
+      description: |
+        例如 scripts/ 需要网络访问、读写文件、调用外部服务,或者 skill 会指示 agent 做
+        不可逆操作。没有就写"无"。
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: 提交前确认
+      options:
+        - label: 我已在 skills/ 下搜索过,没有能覆盖这件事的现有 skill
+          required: true
+        - label: 我理解 PR 需要提交完整的 strict_full 结构(或按规则申请豁免)
+          required: true

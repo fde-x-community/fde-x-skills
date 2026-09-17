@@ -1,0 +1,8 @@
+{
+  "case_id": "edge-missing-input",
+  "input_class": "Required material is absent or ambiguous.",
+  "input": {},
+  "expected_behavior": "Replace with the safe default: mark the unknown, stop at the boundary, or emit a partial result.",
+  "stop_condition": "Replace with the condition under which the skill must stop rather than guess.",
+  "status": "not_run"
+}
