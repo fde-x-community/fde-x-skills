@@ -1,16 +1,37 @@
-# fdex-skills
+# fde-x-skills
 
-FDE X 社区开源的企业级 skill 集合。每个 skill 都从一次真实的企业任务里长出来,遵循
-[Agent Skills](https://agentskills.io/specification) 开放标准,可以被 39+ 个 harness 直接读取,
-不绑定任何单一厂商。
+把**真实企业需求**中反复出现的工作，沉淀为可检查、可复用的 Agent Skill。这里关注业务角色、输入材料、判断规则、交付结果和适用边界，而不只是一段能运行的提示词。
 
-## 收录的 skill
+如果你有企业场景中的待解决问题，可以[提交脱敏需求](.github/ISSUE_TEMPLATE/enterprise-demand.yml)；如果你想参与实现，请先读[贡献指南](CONTRIBUTING.md)。Skill 包遵循 [Agent Skills 开放规范](https://agentskills.io/specification)的基本格式；本仓库另有质量和证据要求。
+
+## 从需求到 Skill：虚构示意
+
+> 以下是**虚构案例**，只为说明工作方法，不代表本仓库已有企业案例或已验证效果。
+
+某企业的客户成功团队每周需要整理客户会议纪要，识别待跟进事项。原流程依赖人工判断：谁负责、何时到期、哪些表述只是建议而非承诺。对应 Skill 可以接收脱敏纪要与团队规则，生成待办草稿，并把负责人不明、日期冲突或含敏感信息的条目标记为待人工确认。验证时，应比较不同纪要上的漏项、误判和人工修改量；未经验证，不宣称节省了多少时间。
+
+这个例子中，可复用的是“识别、核对、标记不确定性”的方法；客户内部系统、专有术语和真实纪要不应直接放进公开包。
+
+## 收录的 Skill
 
 <!-- SKILLS:START -->
 _还没有 skill。用 `node scripts/new-skill.mjs <name>` 创建第一个。_
 <!-- SKILLS:END -->
 
-这张表由 `node scripts/build-index.mjs` 生成,不要手改。
+当前尚无已收录 Skill。索引由 `node scripts/build-index.mjs` 生成，不要手改。`draft` 表示仍在验证；结构检查通过不等于企业场景效果已被验证。
+
+| 成熟度 | 可以得出的结论 |
+| --- | --- |
+| `draft` | 正在构建或验证；不能据此判断业务效果 |
+| `package_validated` | 包与测试证据可独立复核；不代表企业场景效果已验证 |
+| `operationally_validated` | 已有冻结环境和基线下的配对证据；仍需检查适用边界 |
+
+## 怎么参与
+
+- **有业务问题：** 用[企业需求表单](.github/ISSUE_TEMPLATE/enterprise-demand.yml)先描述问题，细节可以在评论中逐步澄清；也可参考[AI 辅助起草方式](docs/AI需求澄清方案.md)。
+- **有领域经验：** 在需求 Issue 中帮助澄清业务规则、例外和可公开的验收样例。
+- **想实现 Skill：** 阅读[贡献指南](CONTRIBUTING.md)，关联需求并提出方案。
+- **参与审查：** 在 PR 中核对需求是否被准确提炼、证据是否支持结论、边界是否清楚。
 
 ## 为什么有这个仓库
 

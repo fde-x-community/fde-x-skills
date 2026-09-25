@@ -18,6 +18,8 @@
 
 import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
 import { join, relative, basename, extname, sep } from "node:path";
+import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
 // ---------------------------------------------------------------- 常量
 
@@ -134,9 +136,9 @@ function isTextFile(p) {
 /**
  * 解析 SKILL.md 的 YAML frontmatter。
  *
- * 只支持 name / description 两个键,并且显式拒绝其他键——规范之外的顶层字段会被
- * 严格解析器拒绝并丢弃整个 skill,所以这里必须在 PR 阶段就拦住。
- * 支持 `key: value`、带引号的值,以及 `|` / `>` 块标量。
+ * 本仓库只收录 name / description 两个顶层字段。
+ * 这是仓库治理约束，比 Agent Skills 开放规范更严格。
+ * 支持简单标量和块标量。
  */
 export function parseFrontmatter(text) {
   const lines = text.split(/\r?\n/);
@@ -210,9 +212,9 @@ function checkFrontmatter(skillDir, dirName, errors, warnings) {
 
   if (parsed.unknown.length) {
     errors.push(
-      `SKILL.md frontmatter 含规范之外的字段: ${parsed.unknown.join(", ")}。` +
-        `顶层只允许 ${ALLOWED_FRONTMATTER_KEYS.join(" / ")};` +
-        `作者、版本、回滚点请写进 VERSION.json`,
+        `SKILL.md frontmatter 含本仓库不收录的字段: ${parsed.unknown.join(", ")}。` +
+        `本仓库只允许 ${ALLOWED_FRONTMATTER_KEYS.join(" / ")};` +
+        `这是仓库规则，并非 Agent Skills 开放规范的限制。作者、版本等写进 VERSION.json`,
     );
   }
 
@@ -535,7 +537,7 @@ function main(argv) {
 
   if (targets.length === 0) {
     if (asJson) console.log(JSON.stringify({ skills: [], ok: true }, null, 2));
-    else console.log("skills/ 下没有找到任何 skill。");
+    else console.log("skills/ 下没有找到任何 skill；当前只完成工具链检查，尚未验证 Skill 包。");
     return 0;
   }
 
@@ -563,6 +565,6 @@ function main(argv) {
   return failed.length === 0 ? 0 : 1;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   process.exit(main(process.argv.slice(2)));
 }

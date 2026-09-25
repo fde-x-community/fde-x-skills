@@ -1,13 +1,21 @@
 # 贡献指南
 
-fdex-skills 收集可复用的 agent skill。任何人都可以提 PR,但每个 skill 必须满足
+fde-x-skills 收集可复用的 agent skill。任何人都可以提 PR,但每个 skill 必须满足
 同一套结构约定——这样使用者才能信任仓库里的任何一条,而不必逐个人肉审查作者。
+
+## 从业务问题开始
+
+还没有明确 Skill 方案时，先提交[企业需求 Issue](.github/ISSUE_TEMPLATE/enterprise-demand.yml)：说明业务角色、现行做法、痛点、期望结果与成功标准。只提交脱敏摘要或合成样例，不公开客户原始材料。维护者会判断是扩展现有 Skill、创建新 Skill，还是先继续澄清需求。
+
+已有清晰方案时，可提交[新 Skill 提案](.github/ISSUE_TEMPLATE/new-skill.yml)，关联需求 Issue，说明触发条件和可复用边界。PR 中要解释需求如何被提炼成方法，并给出验证证据；没有证据时如实保持 `draft`。
+
+需求仍不清楚时先在 Issue 中澄清；与已有 Skill 重复时优先扩展已有包。一次性的客户专属任务可以记录可公开的经验，但不自动收录为通用 Skill。业务或领域审查者应核对问题定义与输出可用性；技术审查者核对包结构、兼容性、脚本副作用和测试结果。
 
 ## 五分钟上手
 
 ```bash
 # 1. Fork 并 clone
-git clone https://github.com/<you>/fdex-skills && cd fdex-skills
+git clone https://github.com/<you>/fde-x-skills && cd fde-x-skills
 
 # 2. 从模板生成骨架
 node scripts/new-skill.mjs my-skill --author <你的 GitHub handle>
@@ -29,11 +37,11 @@ git add skills/my-skill README.md && git commit -m "Add skill: my-skill"
 
 ### `SKILL.md`
 
-frontmatter **只允许 `name` 和 `description` 两个字段**。
-
-这不是风格偏好。Agent Skills 规范之外的顶层字段会被严格解析器**拒绝并丢弃整个 skill**
-——不是忽略,是让这个 skill 在那些 harness 上彻底消失。作者、版本、回滚点写进
-`VERSION.json`。
+frontmatter **只收录 `name` 和 `description`**。这是本仓库的收录约束，
+比 [Agent Skills 开放规范](https://agentskills.io/specification)更严格：规范允许
+`license`、`compatibility`、`metadata`、`allowed-tools` 等可选字段；本仓库目前不接收。
+作者、版本和回滚点写进 `VERSION.json`。与平台字段要求的差异见
+[兼容性调研](docs/frontmatter-兼容性调研.md)。
 
 `description` 是模型判断是否触发本 skill 的**唯一依据**。写清"做什么 + 什么时候用":
 
@@ -49,6 +57,8 @@ description: 从 PDF 中提取文本和表格并导出为 CSV 或 JSON。当用�
 正文控制在 500 行以内。详细知识放 `references/`,并在正文里直接链接。
 
 ### 十二层结构
+
+下面的 `VERSION.json`、六类评估、日志契约与 `agents/openai.yaml` 是**本仓库的治理和展示要求**，不是 Agent Skills 开放规范对所有平台的必需项。标准入口是 `SKILL.md`；其他层用于说明来源、约束、可复核证据及平台展示。不同平台是否读取这些附加文件，应分别验证。
 
 ```
 skills/<name>/
