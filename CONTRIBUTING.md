@@ -15,7 +15,7 @@ fde-x-skills 收集可复用的 agent skill。任何人都可以提 PR,但每个
 
 ```bash
 # 1. Fork 并 clone
-git clone https://github.com/<you>/fde-x-skills && cd fde-x-skills
+git clone https://github.com/<you>/fdex-skills && cd fdex-skills
 
 # 2. 从模板生成骨架
 node scripts/new-skill.mjs my-skill --author <你的 GitHub handle>
@@ -37,11 +37,11 @@ git add skills/my-skill README.md && git commit -m "Add skill: my-skill"
 
 ### `SKILL.md`
 
-frontmatter **只收录 `name` 和 `description`**。这是本仓库的收录约束，
-比 [Agent Skills 开放规范](https://agentskills.io/specification)更严格：规范允许
-`license`、`compatibility`、`metadata`、`allowed-tools` 等可选字段；本仓库目前不接收。
-作者、版本和回滚点写进 `VERSION.json`。与平台字段要求的差异见
-[兼容性调研](docs/frontmatter-兼容性调研.md)。
+frontmatter **只允许 `name` 和 `description` 两个字段**。
+
+这不是风格偏好。Agent Skills 规范之外的顶层字段会被严格解析器**拒绝并丢弃整个 skill**
+——不是忽略,是让这个 skill 在那些 harness 上彻底消失。作者、版本、回滚点写进
+`VERSION.json`。
 
 `description` 是模型判断是否触发本 skill 的**唯一依据**。写清"做什么 + 什么时候用":
 
@@ -57,8 +57,6 @@ description: 从 PDF 中提取文本和表格并导出为 CSV 或 JSON。当用�
 正文控制在 500 行以内。详细知识放 `references/`,并在正文里直接链接。
 
 ### 十二层结构
-
-下面的 `VERSION.json`、六类评估、日志契约与 `agents/openai.yaml` 是**本仓库的治理和展示要求**，不是 Agent Skills 开放规范对所有平台的必需项。标准入口是 `SKILL.md`；其他层用于说明来源、约束、可复核证据及平台展示。不同平台是否读取这些附加文件，应分别验证。
 
 ```
 skills/<name>/

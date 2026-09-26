@@ -21,7 +21,7 @@ body:
     id: name
     attributes:
       label: 建议的 skill 名
-      description: 只用小写字母、数字和连字符；正式创建 Skill 时脚手架和 CI 会检查名称。
+      description: kebab-case,只允许小写字母、数字和单个连字符
       placeholder: pdf-table-extractor
     validations:
       required: true

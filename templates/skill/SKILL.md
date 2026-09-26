@@ -8,9 +8,9 @@ description: ${description}
 <!--
   模板说明(提交前删除本注释块)
 
-  本仓库的 frontmatter 只收录 name 和 description。这比开放规范更严格，
-  因而不能把 license、compatibility、metadata、allowed-tools 写在这里。
-  仓库治理用的作者、版本、回滚点写进 VERSION.json。
+  frontmatter 只允许 name 和 description 两个字段。
+  agentskills.io 规范之外的字段会被严格解析器拒绝,导致整个 skill 被丢弃,
+  而不是被忽略。作者、版本、回滚点写进 VERSION.json。
 
   description 是模型判断是否触发本 skill 的唯一依据,写"做什么 + 什么时候用"。
   正文控制在 500 行以内,详细知识放进 references/ 并按需链接。
