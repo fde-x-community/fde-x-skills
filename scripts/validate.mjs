@@ -17,7 +17,8 @@
 //   - 零依赖:只用 Node 内置模块,贡献者不需要 npm install
 
 import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
-import { join, relative, basename, extname, sep } from "node:path";
+import { join, relative, basename, extname, sep, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
 // ---------------------------------------------------------------- 常量
 
@@ -563,6 +564,6 @@ function main(argv) {
   return failed.length === 0 ? 0 : 1;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   process.exit(main(process.argv.slice(2)));
 }

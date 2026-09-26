@@ -7,8 +7,8 @@
 // 贡献者不要手改 README 的索引表——CI 会跑 --check,漂移就阻断。
 
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
-import { join, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { join, dirname, resolve } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { discoverSkills, parseFrontmatter } from "./validate.mjs";
 
@@ -105,6 +105,6 @@ function main(argv) {
   return 0;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   process.exit(main(process.argv.slice(2)));
 }
