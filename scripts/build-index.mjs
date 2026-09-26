@@ -56,7 +56,7 @@ export function renderTable(root = ROOT) {
     .sort((a, b) => a.name.localeCompare(b.name));
 
   if (skills.length === 0) {
-    return "_还没有 skill。用 `node scripts/new-skill.mjs <name>` 创建第一个。_";
+    return "_这里收录从真实企业任务中提炼的 Skill,欢迎从一个真实企业需求开始贡献_";
   }
 
   const lines = [
