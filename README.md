@@ -32,17 +32,34 @@ Read the [contribution guide](CONTRIBUTING.md), link your work to a need, and pr
 
 ## FDE-X Community
 
-- **If you are deeply interested in AI**<br>Join the community. There are top-tier roles and real work you can talk about in interviews — your results go directly to the business owners who set the problem
-- **If you have deep experience landing AI and a distinct understanding of AI application scenarios**<br>Join the mentor group. More than 30 mentors have joined: 10+ HRDs from publicly listed tech companies, 20+ AI algorithm and FDE leads from major tech firms, plus investors and entrepreneurs
-- **If you have deep technical expertise in AI**<br>Become a technology partner. We have members from the AI labs at Fudan University, Shanghai Jiao Tong University, and the Gaoling School of Artificial Intelligence at Renmin University of China, as well as the DeepSeek AI and Shanda AI teams
+- **If you are deeply interested in AI**
+
+  Join the community. There are top-tier roles and real work you can talk about in interviews — your results go directly to the business owners who set the problem.
+
+- **If you have deep experience landing AI and a distinct understanding of AI application scenarios**
+
+  Join the mentor group. More than 30 mentors have joined: 10+ HRDs from publicly listed tech companies, 20+ AI algorithm and FDE leads from major tech firms, plus investors and entrepreneurs.
+
+- **If you have deep technical expertise in AI**
+
+  Become a technology partner. We have members from the AI labs at Fudan University, Shanghai Jiao Tong University, and the Gaoling School of Artificial Intelligence at Renmin University of China, as well as the DeepSeek AI and Shanda AI teams.
 
 Follow the FDE-X official WeChat account and leave us a message there, or add WeChat 「AnyHelper_FDE」 to get in touch.
 ![FDE-X official WeChat account / WeChat AnyHelper_FDE](assets/wechat-qr.jpg)
 
 ## About Us
-- **Founding members**<br>From DeepSeek, Tencent Hunyuan, Doubao, Zhipu, and ByteDance, plus leading teams and universities such as Shanghai Jiao Tong University, Fudan University, Peking University, Tianjin University, and Carnegie Mellon University
-- **Mentors**<br>Professors and experts who understand AI, HR leads at publicly listed tech companies who understand hiring, and investors who understand startups
-- **Technical review committee and partners**<br>AI labs at Fudan University, Shanghai Jiao Tong University, and the Gaoling School of Artificial Intelligence at Renmin University of China, plus the DeepSeek AI and Shanda AI teams
+
+- **Founding members**
+
+  From DeepSeek, Tencent Hunyuan, Doubao, Zhipu, and ByteDance, plus leading teams and universities such as Shanghai Jiao Tong University, Fudan University, Peking University, Tianjin University, and Carnegie Mellon University.
+
+- **Mentors**
+
+  Professors and experts who understand AI, HR leads at publicly listed tech companies who understand hiring, and investors who understand startups.
+
+- **Technical review committee and partners**
+
+  AI labs at Fudan University, Shanghai Jiao Tong University, and the Gaoling School of Artificial Intelligence at Renmin University of China, plus the DeepSeek AI and Shanda AI teams.
 
 ## Documentation
 
