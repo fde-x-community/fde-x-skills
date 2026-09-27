@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // 从 skills/*/VERSION.json 和 SKILL.md 生成 README 里的 skill 索引。
 //
-//   node scripts/build-index.mjs            # 写回 README.md 与 README.zh.md
+//   node scripts/build-index.mjs            # 写回 README.md 与 README.en.md
 //   node scripts/build-index.mjs --check    # 只检查是否漂移(CI 用)
 //
 // 贡献者不要手改 README 的索引表——CI 会跑 --check,漂移就阻断。
@@ -18,14 +18,14 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const TARGETS = [
   {
     file: "README.md",
+    header: "| Skill | 说明 | 版本 | 成熟度 | 作者 |",
+    empty: "_这里收录从真实企业任务中提炼的 Skill,欢迎从一个真实企业需求开始贡献_",
+  },
+  {
+    file: "README.en.md",
     header: "| Skill | Description | Version | Maturity | Author |",
     empty:
       "_Skills distilled from real enterprise tasks are listed here. Contributions are welcome — start from a real enterprise need_",
-  },
-  {
-    file: "README.zh.md",
-    header: "| Skill | 说明 | 版本 | 成熟度 | 作者 |",
-    empty: "_这里收录从真实企业任务中提炼的 Skill,欢迎从一个真实企业需求开始贡献_",
   },
 ];
 
