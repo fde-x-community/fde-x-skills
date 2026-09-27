@@ -1,44 +1,51 @@
-# fde-x-skills
-FDE X 社区开源的企业级 skill 集合。每个 skill 都从一次真实的企业任务里长出来,遵循
-[Agent Skills](https://agentskills.io/specification) 开放标准,可以被 39+ 个 harness 直接读取
+# FDE-X-Skills
+<img src="assets/fde-x-logo-4x3.png" alt="FDE-X" width="320">
 
-**本仓库收录的skill来自于真实的企业业务，已有企业内部的实际使用与验证。具体使用场景详见skill内部**
+> **FDE，Forward Deployed Engineer** <br> 懂 AI，更走进真实业务场景；理解问题为何发生，把 AI 变成可复用、可交付的结果。
 
-Skill 包遵循 [Agent Skills 开放规范](https://agentskills.io/specification)，但本仓库另有质量和证据要求。
 
-## 从需求到 Skill：
+FDE-X Skill 是 [FDE-X 社区](https://fde-x.com) 开源的企业级 skill 仓库，遵循 [Agent Skills](https://agentskills.io/specification) 开放标准。
 
-> 以下是一个为了说明工作方法的案例
-某企业的客户成功团队每周需要整理客户会议纪要，识别待跟进事项。原流程依赖人工判断：谁负责、何时到期、哪些表述只是建议而非承诺。对应 Skill 可以接收脱敏纪要与团队规则，生成待办草稿，并把负责人不明、日期冲突或含敏感信息的条目标记为待人工确认。
-通过验证不同纪要上的误判，漏项评价skill的好坏，并最终成功帮助企业负责人省下大量时间。
 
-这个例子中，可复用的是识别与标记不确定性这套流程；
-## 收录的 Skill
+## Skill 目录
+
+**每个 skill 都源自一个真实的企业需求，并在企业真实场景使用并验证**。 
 
 <!-- SKILLS:START -->
 _这里收录从真实企业任务中提炼的 Skill,欢迎从一个真实企业需求开始贡献_
 <!-- SKILLS:END -->
 
-## 怎么参与
+## 企业需求
 
-- **有业务问题：** 用[企业需求表单](.github/ISSUE_TEMPLATE/enterprise-demand.yml)描述问题
-- **有领域经验：** 帮助澄清指标口径与边界规则
-- **想实现 Skill：** 阅读[贡献指南](CONTRIBUTING.md)，关联需求并提出方案。
+> 把一个真实问题带进来
 
-公开提交只包含脱敏摘要或合成样例，不提交客户机密等原始材料。
+如果你有真实的企业场景、AI 落地的痛点，欢迎通过 [企业需求表单](.github/ISSUE_TEMPLATE/enterprise-demand.yml) 或 [企业共创](https://fde-x.com/#enterprise) 描述你的问题。
 
-## 怎么用
+## 开源贡献
 
-每个 skill 是一个自包含目录,复制进你的 harness 技能目录即可。没有构建步骤,也不依赖这个
-仓库的其他部分。
+> 成为一起解决问题的人
 
+阅读 [贡献指南](CONTRIBUTING.md)，关联需求并提供解决方案。
 
-## 详细文档
+## FDE-X 社区
 
-- [从企业需求到 Skill](docs/从企业需求到Skill.md)：仓库价值、任务实践、提炼过程与虚构示意。
-- [Skill 结构与验证](docs/Skill结构与验证.md)：包结构、质量检查、成熟度和本地命令。
-- [贡献指南](CONTRIBUTING.md)：提案、提交与审查约定。
+- **如果你是对 AI 领域有浓厚兴趣**<br>欢迎加入社区，这里有顶尖的岗位、面试讲得出的真实作品，你的成果将直接提交给出题企业的业务负责人
+- **如果你在 AI 落地有深厚经验、对 AI 应用场景有独到理解**<br>欢迎加入导师团，目前已有 30 余位导师加入：10 余位科技上市公司 HRD、20 余位大厂 AI 算法与 FDE 负责人，以及投资人与企业家
+- **如果你在 AI 领域有深厚的技术积累**<br>欢迎成为我们的技术伙伴，这里有复旦大学、上海交通大学、人大高瓴人工智能学院的 AI 实验室成员，以及 DeepSeek AI、盛大 AI 团队
 
-## 许可
+欢迎关注 FDE-X 公众号，公众号留言，或添加微信 「AnyHelper_FDE」沟通交流。
+![FDE-X 公众号 / 微信 AnyHelper_FDE](assets/wechat-qr.jpg)
+
+## 关于我们
+- **创始成员**<br>来自 DeepSeek、腾讯混元、豆包、智谱、字节，以及上海交通大学、复旦大学、北京大学、天津大学、卡内基梅隆大学等一线团队与高校
+- **导师团**<br>有懂 AI 的专家教授、懂就业的科技上市公司人事负责人、懂创业的投资人
+- **技术评委会与伙伴**<br>复旦大学、上海交通大学、人大高瓴人工智能学院的 AI 实验室，以及 DeepSeek AI、盛大 AI 团队
+
+## 参考文档
+
+- [从企业需求到 Skill](docs/从企业需求到Skill.md)：需求提出、任务实践、提炼过程
+- [Skill 结构与验证](docs/Skill结构与验证.md)：Skill 结构、质量检查、完成度评估
+
+## License
 
 [MIT](LICENSE)。
