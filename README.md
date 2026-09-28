@@ -1,116 +1,73 @@
-# fdex-skills
+# FDE-X-Skills
 
-FDE X 社区开源的企业级 skill 集合。每个 skill 都从一次真实的企业任务里长出来,遵循
-[Agent Skills](https://agentskills.io/specification) 开放标准,可以被 39+ 个 harness 直接读取,
-不绑定任何单一厂商。
+[English](README.en.md) | **简体中文**
 
-## 收录的 skill
+<img src="assets/fde-x-logo-4x3.png" alt="FDE-X" width="320">
+
+> **FDE，Forward Deployed Engineer** <br> 懂 AI，更走进真实业务场景；理解问题为何发生，把 AI 变成可复用、可交付的结果。
+
+
+FDE-X Skill 是 [FDE-X 社区](https://fde-x.com) 开源的企业级 skill 仓库，遵循 [Agent Skills](https://agentskills.io/specification) 开放标准。
+
+
+## Skill 目录
+
+**每个 skill 都源自一个真实的企业需求，并在企业真实场景使用并验证**。 
 
 <!-- SKILLS:START -->
-_还没有 skill。用 `node scripts/new-skill.mjs <name>` 创建第一个。_
+_这里收录从真实企业任务中提炼的 Skill,欢迎从一个真实企业需求开始贡献_
 <!-- SKILLS:END -->
 
-这张表由 `node scripts/build-index.mjs` 生成,不要手改。
+## 企业需求
 
-## 为什么有这个仓库
+> 把一个真实问题带进来
 
-企业把 Agent 用进业务,卡住的通常不是模型能力,而是**可复用**。
+如果你有真实的企业场景、AI 落地的痛点，欢迎通过 [企业需求表单](.github/ISSUE_TEMPLATE/enterprise-demand.yml) 或 [企业共创](https://fde-x.com/#enterprise) 描述你的问题。
 
-一项工作今天由某个人做完,明天换个人就要重新解释一遍背景、规则和例外。把这件事交给 AI,
-问题会以更快的速度重演:换一份材料、换一位同事、客户临时改了要求,上次的结果就不能用了。
+## 开源贡献
 
-企业真正需要的,是把"这个团队已经会做的事"整理成 Agent 能调用、团队能维护、业务变化之后
-还能继续迭代的东西。这就是 Skill。它正在接手一部分过去由工作流节点承担的判断,成为 FDE
-的最小交付单元。
+> 成为一起解决问题的人
 
-这个仓库是这件事的公开部分:每个 skill 对应一次真实任务,连同它的边界、证据和已知限制一起
-开源。它同时解决两边的问题。
+阅读 [贡献指南](CONTRIBUTING.md)，关联需求并提供解决方案。
 
-**对企业**,拿到的是一份可以逐层检视、能在自己环境里重跑的交付物,而不是一段演示用的 prompt。
+## FDE-X 社区
 
-**对做任务的人**,拿到的是一份经得住追问的作品。简历上最没有说服力的东西是十个 AI 项目,
-最有力的是一个真实任务的完整证据链:OKR 对齐、需求拆解、Skill 上线、任务评测与反馈。
+- **如果你是对 AI 领域有浓厚兴趣**
 
-## 一个 skill 是怎么来的
+  欢迎加入社区，这里有顶尖的岗位、面试讲得出的真实作品，你的成果将直接提交给出题企业的业务负责人。
 
-任务来自 FDE X 社区对接的真实企业需求。而坐下去直接写规范,容易把还没验证的设想写成规则
-——手里没有真实输入时,最难的判断在哪里根本看不出来。所以这里的每个 skill 都从做任务开始。
+- **如果你在 AI 落地有深厚经验、对 AI 应用场景有独到理解**
 
-1. **先做一遍。** 用真实材料完成一次任务,记录 AI 用了哪些信息、在哪一步犹豫、哪里需要人纠正。
-2. **从头重跑。** 人工纠偏之后把整个任务重跑一遍,确认留下的是方法,不是一次运气。
-3. **提炼进包。** 把反复有效的判断、规则、样例写进对应的层;只对眼下这道题成立的,不写。
-4. **换任务回归。** 用目标相似、输入差很大的任务再测一遍,包括缺料、冲突、写错的输入。
-   找到能力边界,才谈得上可复用。
+  欢迎加入导师团，目前已有 30 余位导师加入：10 余位科技上市公司 HRD、20 余位大厂 AI 算法与 FDE 负责人，以及投资人与企业家。
 
-这个过程留在 `VERSION.json` 的 `source_episode` 和 `design_basis` 里,可以顺着它回头核对。
+- **如果你在 AI 领域有深厚的技术积累**
 
-## 一个 skill 里有什么
+  欢迎成为我们的技术伙伴，这里有复旦大学、上海交通大学、人大高瓴人工智能学院的 AI 实验室成员，以及 DeepSeek AI、盛大 AI 团队。
 
-十二层 `strict_full` 结构。每层回答一个具体的验收问题,不是一堆占位的目录:
+欢迎关注 FDE-X 公众号，公众号留言，或添加微信 「AnyHelper_FDE」沟通交流。
 
-```
-skills/<name>/
-├── SKILL.md              任务主线:触发条件、输入、步骤、什么时候停止或交给人
-├── agents/openai.yaml    harness 侧的展示名、简介、默认提示词
-├── references/           业务知识和 SOP——规则变了改这里,不用动主线
-├── scripts/              固定计算与格式转换——确定性逻辑不靠模型临场发挥
-├── assets/               产出物模板
-├── schemas/              输入输出契约——每个字段只有一个规范定义
-├── examples/golden/      专家认可的好行为
-├── examples/edge/        缺料、冲突、边界时的安全默认
-├── examples/failed/      真实观察到的失败、成因、修复、回归用例
-├── tests/                可执行测试 + 场景矩阵
-├── logs/                 日志契约 + 合成模板——事后查得到到底发生了什么
-└── VERSION.json          版本、作者、成熟度、回滚点
-```
 
-**做全、做好、好用是三个要分开验收的问题。** 混在一起,就永远说不清到底哪里不合格:
+![FDE-X 公众号 / 微信 AnyHelper_FDE](assets/wechat-qr.jpg)
 
-- 内容缺项 → 查 `SKILL.md`、`schemas/`、`examples/`
-- 结果不够好 → 查业务判断,以及"什么叫好"有没有在 `examples/` 里写成共识
-- 换个场景就跑不动 → 查 `scripts/`、`tests/`、`logs/`
+## 关于我们
 
-`references/`、`scripts/`、`assets/` 在责任确实不存在时可以按规则豁免;其余各层不可豁免,
-而且空目录、占位符和作者自写的 `pass` 都不算数。
+- **创始成员**
 
-## 怎么用
+  来自 DeepSeek、腾讯混元、豆包、智谱、字节，以及上海交通大学、复旦大学、北京大学、天津大学、卡内基梅隆大学等一线团队与高校。
 
-每个 skill 是一个自包含目录,复制进你的 harness 技能目录即可。没有构建步骤,也不依赖这个
-仓库的其他部分。
+- **导师团**
 
-## 凭什么相信这个仓库里的东西
+  有懂 AI 的专家教授、懂就业的科技上市公司人事负责人、懂创业的投资人。
 
-- **CI 结构守门。** `node scripts/validate.mjs` 检查十二层是否齐全、frontmatter 是否只有
-  `name` 和 `description`、有没有残留占位符和凭证、场景矩阵有没有覆盖六类评估。不过就是
-  不过,不靠 reviewer 记得住规则。
-- **测试是真的跑过。** 场景矩阵里标 `pass` 不算数,`tests/` 下真的执行过、退出码为 0 才算。
-- **成熟度如实标注。** `VERSION.json` 的 `status` 把"结构完整"和"验证过"分开:`draft` 是
-  正常状态,不是失败;要写更高的档,就得拿出可独立复核的证据。已经完成的部分和还没验证的
-  设想,不混为一谈。
+- **技术评委会与伙伴**
 
-## 贡献
+  复旦大学、上海交通大学、人大高瓴人工智能学院的 AI 实验室，以及 DeepSeek AI、盛大 AI 团队。
 
-在真实任务里验证过的方法,都欢迎提 PR。五分钟上手、十二层约定和审查标准见
-[CONTRIBUTING.md](CONTRIBUTING.md)。
+## 参考文档
 
-```bash
-node scripts/new-skill.mjs my-skill --author <your-handle>
-node scripts/validate.mjs && node scripts/test-all.mjs && node scripts/build-index.mjs
-```
+- [从企业需求到 Skill](docs/从企业需求到Skill.md)：需求提出、任务实践、提炼过程
+- [Skill 结构与验证](docs/Skill结构与验证.md)：Skill 结构、质量检查、完成度评估
 
-不需要 `npm install` —— 工具链是零依赖的 Node 脚本,CI 跑的就是这三条命令。
-
-`scripts/` 是一个 skill 里唯一会真正执行代码的地方,也是 review 的重点:修改它的 PR 由人
-逐行看。任务做完、方法稳定下来并提交进这里的同学,有机会成为本仓库的 contributor。
-
-## 仓库结构
-
-```
-skills/<name>/        每个 skill 一个目录,十二层 strict_full 结构
-templates/skill/      可复制填写的骨架
-scripts/              结构守门、脚手架、测试运行器、索引生成
-```
-
-## 许可
+## License
 
 [MIT](LICENSE)。

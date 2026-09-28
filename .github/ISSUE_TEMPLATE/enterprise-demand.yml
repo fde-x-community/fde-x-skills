@@ -1,0 +1,55 @@
+name: 提交企业需求
+description: 先说清遇到的业务问题，细节可以在评论中逐步澄清
+title: "[需求] "
+labels: ["enterprise-demand"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        只需先讲清楚你遇到了什么问题。下面的细节允许留空，维护者会在评论中和你一起澄清。请勿提交客户机密、真实凭证、个人信息或未经授权的原始材料。
+  - type: textarea
+    id: story
+    attributes:
+      label: 你遇到了什么业务问题？
+      description: 谁在什么场景下做什么事，现在怎么做，哪里费时或容易出错？先用自己的话描述即可。
+      placeholder: 例如：每周要把多份脱敏报表合并成经营摘要，人工核对指标时常遇到口径不一致。
+    validations:
+      required: true
+  - type: textarea
+    id: metrics
+    attributes:
+      label: 涉及哪些指标？各自的口径是什么？
+      description: 数据处理任务请尽量列出指标，并澄清单位、时间范围、统计对象、分母和去重方式；不知道的写“待澄清”。非数据任务可写“不适用”。
+      placeholder: |
+        - 指标：月活客户数；口径：自然月内至少完成一次有效交易的去重客户数。
+        - 指标：转化率；口径：分子、分母和统计周期待澄清。
+    validations:
+      required: false
+  - type: textarea
+    id: calculation
+    attributes:
+      label: 计算与边界规则
+      description: 说明公式、缺失值、异常值、重复数据、跨期或冲突数据怎么处理；尚不确定的可留到讨论中解决。
+    validations:
+      required: false
+  - type: textarea
+    id: must_have
+    attributes:
+      label: 希望得到的成果必须包含什么？
+      description: 请列出交付物中不可缺少的内容、格式、来源标注或人工确认标记；现在想不全也可以后补。
+    validations:
+      required: false
+  - type: textarea
+    id: public_example
+    attributes:
+      label: 可公开的脱敏或虚构示例（可选）
+      description: 没有合适样例可以留空；不要粘贴真实客户数据。
+    validations:
+      required: false
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: 公开信息确认
+      options:
+        - label: 我已确认正文没有客户机密、真实凭证、个人信息或未经授权的原始材料。
+          required: true

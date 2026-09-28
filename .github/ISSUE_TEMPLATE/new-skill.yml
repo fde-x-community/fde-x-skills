@@ -1,13 +1,21 @@
 name: 提议一个新 skill
-description: 还没开始写,先讨论这个 skill 该不该存在、边界在哪
+description: 已有需求背景后，讨论是否创建新 Skill 及其边界
 title: "[skill] "
 labels: ["proposal"]
 body:
   - type: markdown
     attributes:
       value: |
-        写之前先搜一下 `skills/` 里有没有已经覆盖这件事的。重复的能力应该扩展已有的 skill,
-        而不是新建一个——使用者只会被两个相似的 skill 搞糊涂。
+        尚未澄清业务问题时，请先用“提交企业需求”表单。写之前先搜一下 `skills/` 里有没有已经覆盖这件事的。重复的能力应该扩展已有的 skill,
+        而不是新建一个——使用者只会被两个相似的 skill 搞糊涂
+
+  - type: input
+    id: demand
+    attributes:
+      label: 关联的企业需求 Issue
+      description: 填 Issue 链接或编号；没有公开 Issue 时，说明脱敏后的需求背景。
+    validations:
+      required: true
 
   - type: input
     id: name
@@ -15,6 +23,14 @@ body:
       label: 建议的 skill 名
       description: kebab-case,只允许小写字母、数字和单个连字符
       placeholder: pdf-table-extractor
+    validations:
+      required: true
+
+  - type: textarea
+    id: reuse
+    attributes:
+      label: 哪些方法可复用，哪些只是当前项目特有？
+      description: 说明为何不能扩展现有 Skill，以及在什么条件下不应触发。
     validations:
       required: true
 
