@@ -1,0 +1,43 @@
+{
+  "schema_version": "skill_release_v2",
+  "skill_name": "configurable-product-tracker",
+  "version": "0.1.0",
+  "release_date": "2026-10-07",
+  "status": "draft",
+  "author": "qinruipeng",
+  "reviewer": "",
+  "review_basis": "",
+  "anatomy_version": "strict_full_v1",
+  "source_episode": "FDE 跨境配镜企业竞品调研实践；公开材料仅保留脱敏问题描述和可核验报价方法。",
+  "design_basis": [
+    "SKILL.md",
+    "references/collection-errors.md",
+    "references/windows-monitor.md"
+  ],
+  "validation": {
+    "evidence_policy": "本文件描述成熟度；正式发布证据应由独立可回读的产物证明。",
+    "release_evidence": ""
+  },
+  "evaluation_sets": {
+    "trigger": "tests/scenario-matrix.json#trigger",
+    "non_trigger": "tests/scenario-matrix.json#non_trigger",
+    "quality": "tests/scenario-matrix.json#quality",
+    "safety": "tests/scenario-matrix.json#safety",
+    "regression": "tests/scenario-matrix.json#regression",
+    "end_to_end": "tests/scenario-matrix.json#end_to_end"
+  },
+  "approved_rules": [],
+  "breaking_changes": [],
+  "artifact_maturity": "draft",
+  "change_request_state": "not_created",
+  "release_state": "not_created",
+  "deployment_state": "not_created",
+  "rollback_to": "",
+  "rollback_snapshot": "",
+  "rollback_manifest": "",
+  "known_limits": [
+    "当前仅支持 Vooglam US 普通配镜固定零度场景及 Firmoo US/UK Non-Prescription 场景。",
+    "购物车报价不包含未验证的税费、运费及优惠后的最终支付价格。",
+    "固定评测集与独立发布证据仍在整理中。"
+  ]
+}

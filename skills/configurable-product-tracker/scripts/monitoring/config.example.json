@@ -1,0 +1,482 @@
+{
+  "daily_time": "11:00",
+  "timezone": "Windows local time (Asia/Shanghai expected)",
+  "retry_minutes": 30,
+  "retry_count": 3,
+  "identity_timeout_seconds": 240,
+  "product_timeout_seconds": 1800,
+  "products": [
+    {
+      "product_id": "9999",
+      "name": "Okinawa",
+      "sku": "GJGM930066-03",
+      "url": "https://www.vooglam.com/goods-detail/9999",
+      "jobs": [
+        {
+          "lens_type": "Standard Lenses",
+          "technology": "Standard Lenses",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Standard Lenses",
+          "technology": "Advanced Lenses",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Standard Lenses",
+          "technology": "Premium Lenses",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Standard Lenses",
+          "technology": "Special Prescription",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Standard Lenses",
+          "material": "auto",
+          "child": "Standard Photochromic"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Advanced Lenses",
+          "material": "Standard Material",
+          "child": "Standard Photochromic"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Advanced Lenses",
+          "material": "MR™ Pro",
+          "child": "Standard Photochromic"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Premium Lenses",
+          "material": "Standard Material",
+          "child": "Standard Photochromic"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Premium Lenses",
+          "material": "MR™ Pro",
+          "child": "Standard Photochromic"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Standard Lenses",
+          "material": "auto",
+          "child": "Photochromic Blue Light Blocking"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Advanced Lenses",
+          "material": "Standard Material",
+          "child": "Photochromic Blue Light Blocking"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Advanced Lenses",
+          "material": "MR™ Pro",
+          "child": "Photochromic Blue Light Blocking"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Premium Lenses",
+          "material": "Standard Material",
+          "child": "Photochromic Blue Light Blocking"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Premium Lenses",
+          "material": "MR™ Pro",
+          "child": "Photochromic Blue Light Blocking"
+        },
+        {
+          "lens_type": "Blue Light Blocking",
+          "technology": "Standard Lenses",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Blue Light Blocking",
+          "technology": "Advanced Lenses",
+          "material": "Standard Material"
+        },
+        {
+          "lens_type": "Blue Light Blocking",
+          "technology": "Advanced Lenses",
+          "material": "MR™ Pro"
+        },
+        {
+          "lens_type": "Blue Light Blocking",
+          "technology": "Premium Lenses",
+          "material": "Standard Material"
+        },
+        {
+          "lens_type": "Blue Light Blocking",
+          "technology": "Premium Lenses",
+          "material": "MR™ Pro"
+        },
+        {
+          "lens_type": "Blue Light Blocking",
+          "technology": "Special Prescription",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Polarized Lenses",
+          "technology": "Standard Lenses",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Polarized Lenses",
+          "technology": "Advanced Lenses",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Polarized Lenses",
+          "technology": "Premium Lenses",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Driving Lenses",
+          "technology": "Advanced Lenses",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Driving Lenses",
+          "technology": "Premium Lenses",
+          "material": "auto"
+        }
+      ]
+    },
+    {
+      "product_id": "9990",
+      "name": "Niseko",
+      "sku": "GJGX270086-02",
+      "url": "https://www.vooglam.com/goods-detail/9990",
+      "jobs": [
+        {
+          "lens_type": "Standard Lenses",
+          "technology": "Advanced Lenses",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Standard Lenses",
+          "technology": "Premium Lenses",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Standard Lenses",
+          "technology": "Special Prescription",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Advanced Lenses",
+          "material": "Standard Material",
+          "child": "Standard Photochromic"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Advanced Lenses",
+          "material": "MR™ Pro",
+          "child": "Standard Photochromic"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Premium Lenses",
+          "material": "Standard Material",
+          "child": "Standard Photochromic"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Premium Lenses",
+          "material": "MR™ Pro",
+          "child": "Standard Photochromic"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Advanced Lenses",
+          "material": "Standard Material",
+          "child": "Photochromic Blue Light Blocking"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Advanced Lenses",
+          "material": "MR™ Pro",
+          "child": "Photochromic Blue Light Blocking"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Premium Lenses",
+          "material": "Standard Material",
+          "child": "Photochromic Blue Light Blocking"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Premium Lenses",
+          "material": "MR™ Pro",
+          "child": "Photochromic Blue Light Blocking"
+        },
+        {
+          "lens_type": "Transitions®",
+          "technology": "Advanced Lenses",
+          "material": "auto",
+          "child": "Transitions® GEN S™"
+        },
+        {
+          "lens_type": "Transitions®",
+          "technology": "Premium Lenses",
+          "material": "auto",
+          "child": "Transitions® GEN S™"
+        },
+        {
+          "lens_type": "Transitions®",
+          "technology": "Advanced Lenses",
+          "material": "auto",
+          "child": "Transitions® XTRActive®"
+        },
+        {
+          "lens_type": "Transitions®",
+          "technology": "Premium Lenses",
+          "material": "auto",
+          "child": "Transitions® XTRActive®"
+        },
+        {
+          "lens_type": "Blue Light Blocking",
+          "technology": "Advanced Lenses",
+          "material": "Standard Material"
+        },
+        {
+          "lens_type": "Blue Light Blocking",
+          "technology": "Advanced Lenses",
+          "material": "MR™ Pro"
+        },
+        {
+          "lens_type": "Blue Light Blocking",
+          "technology": "Premium Lenses",
+          "material": "Standard Material"
+        },
+        {
+          "lens_type": "Blue Light Blocking",
+          "technology": "Premium Lenses",
+          "material": "MR™ Pro"
+        },
+        {
+          "lens_type": "Blue Light Blocking",
+          "technology": "Special Prescription",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Driving Lenses",
+          "technology": "Advanced Lenses",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Driving Lenses",
+          "technology": "Premium Lenses",
+          "material": "auto"
+        }
+      ]
+    },
+    {
+      "product_id": "10003",
+      "name": "Meguro",
+      "sku": "GJTT685840-01",
+      "url": "https://www.vooglam.com/goods-detail/10003",
+      "jobs": [
+        {
+          "lens_type": "Standard Lenses",
+          "technology": "Standard Lenses",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Standard Lenses",
+          "technology": "Advanced Lenses",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Standard Lenses",
+          "technology": "Premium Lenses",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Standard Lenses",
+          "technology": "Special Prescription",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Standard Lenses",
+          "material": "auto",
+          "child": "Standard Photochromic"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Advanced Lenses",
+          "material": "Standard Material",
+          "child": "Standard Photochromic"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Advanced Lenses",
+          "material": "MR™ Pro",
+          "child": "Standard Photochromic"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Premium Lenses",
+          "material": "Standard Material",
+          "child": "Standard Photochromic"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Premium Lenses",
+          "material": "MR™ Pro",
+          "child": "Standard Photochromic"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Standard Lenses",
+          "material": "auto",
+          "child": "Photochromic Blue Light Blocking"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Advanced Lenses",
+          "material": "Standard Material",
+          "child": "Photochromic Blue Light Blocking"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Advanced Lenses",
+          "material": "MR™ Pro",
+          "child": "Photochromic Blue Light Blocking"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Premium Lenses",
+          "material": "Standard Material",
+          "child": "Photochromic Blue Light Blocking"
+        },
+        {
+          "lens_type": "Photochromic",
+          "technology": "Premium Lenses",
+          "material": "MR™ Pro",
+          "child": "Photochromic Blue Light Blocking"
+        },
+        {
+          "lens_type": "Transitions®",
+          "technology": "Standard Lenses",
+          "material": "auto",
+          "child": "Transitions® GEN S™"
+        },
+        {
+          "lens_type": "Transitions®",
+          "technology": "Advanced Lenses",
+          "material": "auto",
+          "child": "Transitions® GEN S™"
+        },
+        {
+          "lens_type": "Transitions®",
+          "technology": "Premium Lenses",
+          "material": "auto",
+          "child": "Transitions® GEN S™"
+        },
+        {
+          "lens_type": "Transitions®",
+          "technology": "Standard Lenses",
+          "material": "auto",
+          "child": "Transitions® XTRActive®"
+        },
+        {
+          "lens_type": "Transitions®",
+          "technology": "Advanced Lenses",
+          "material": "auto",
+          "child": "Transitions® XTRActive®"
+        },
+        {
+          "lens_type": "Transitions®",
+          "technology": "Premium Lenses",
+          "material": "auto",
+          "child": "Transitions® XTRActive®"
+        },
+        {
+          "lens_type": "Transitions®",
+          "technology": "Standard Lenses",
+          "material": "auto",
+          "child": "Transitions® XTRActive® Polarized™"
+        },
+        {
+          "lens_type": "Transitions®",
+          "technology": "Advanced Lenses",
+          "material": "auto",
+          "child": "Transitions® XTRActive® Polarized™"
+        },
+        {
+          "lens_type": "Transitions®",
+          "technology": "Premium Lenses",
+          "material": "auto",
+          "child": "Transitions® XTRActive® Polarized™"
+        },
+        {
+          "lens_type": "Blue Light Blocking",
+          "technology": "Standard Lenses",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Blue Light Blocking",
+          "technology": "Advanced Lenses",
+          "material": "Standard Material"
+        },
+        {
+          "lens_type": "Blue Light Blocking",
+          "technology": "Advanced Lenses",
+          "material": "MR™ Pro"
+        },
+        {
+          "lens_type": "Blue Light Blocking",
+          "technology": "Premium Lenses",
+          "material": "Standard Material"
+        },
+        {
+          "lens_type": "Blue Light Blocking",
+          "technology": "Premium Lenses",
+          "material": "MR™ Pro"
+        },
+        {
+          "lens_type": "Blue Light Blocking",
+          "technology": "Special Prescription",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Polarized Lenses",
+          "technology": "Standard Lenses",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Polarized Lenses",
+          "technology": "Advanced Lenses",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Polarized Lenses",
+          "technology": "Premium Lenses",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Driving Lenses",
+          "technology": "Advanced Lenses",
+          "material": "auto"
+        },
+        {
+          "lens_type": "Driving Lenses",
+          "technology": "Premium Lenses",
+          "material": "auto"
+        }
+      ]
+    }
+  ],
+  "browser_channel": "chromium",
+  "consent_required": true
+}

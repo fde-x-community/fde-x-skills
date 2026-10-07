@@ -1,0 +1,9 @@
+{
+  "case_id": "failed-missing-playwright-preflight",
+  "observed_failure": "2026-10-06 本地 dry-run 的 runtime_issues 报告当前 Python 缺少 Playwright。",
+  "cause": "执行 run_list 的 Python 环境未安装 scripts/skill/requirements.txt 中声明的 playwright 包。",
+  "repair": "在同一个 Python 环境运行 python -m pip install -r skill/requirements.txt，再运行 python -m playwright install chromium；重新 dry-run 检查 runtime_issues 后才正式采集。",
+  "regression_case": "tests/scenario-matrix.json#regression",
+  "prohibited_recurrence": "环境依赖未满足时把零条购物车报价的报告当作成功交付。",
+  "status": "observed"
+}

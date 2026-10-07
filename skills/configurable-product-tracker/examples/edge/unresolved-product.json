@@ -1,0 +1,12 @@
+{
+  "case_id": "edge-unresolved-product",
+  "input_class": "品牌受支持但商品不在已确认目录，且未提供官网 URL",
+  "input": {
+    "products": [
+      { "merchant": "Vooglam", "product": "UnverifiedExampleModel", "market": "US" }
+    ]
+  },
+  "expected_behavior": "返回 needs_clarification 并生成 clarification.json，指出缺少唯一的已核验官网链接；不开始购物车采集。",
+  "stop_condition": "在商品身份、型号和官方链接得到确认之前停止正式采集。",
+  "status": "pass"
+}

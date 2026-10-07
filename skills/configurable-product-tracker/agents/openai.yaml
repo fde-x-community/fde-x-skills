@@ -1,0 +1,7 @@
+interface:
+  display_name: "跨境配镜商品调研"
+  short_description: "核验 Vooglam 与 Firmoo 商品的配置报价并保留证据"
+  default_prompt: "使用 $configurable-product-tracker 核对指定眼镜商品的官网身份，按支持的镜片配置采集购物车报价，并报告证据与未覆盖范围。"
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,51 @@
+{
+  "schema_version": "skill_eval_matrix_v2",
+  "skill_name": "configurable-product-tracker",
+  "cases": [
+    {
+      "id": "trigger-known-product",
+      "category": "trigger",
+      "input": "查询 Vooglam Okinawa 在美国站的配镜购物车报价",
+      "expected": "触发本 Skill，先解析商品身份与采集档位；无持续监测授权时只做本次查询。",
+      "status": "not_run"
+    },
+    {
+      "id": "non-trigger-unrelated-brand",
+      "category": "non_trigger",
+      "input": "查询某手机品牌的二手回收价",
+      "expected": "不触发本 Skill，也不把非 Vooglam/Firmoo 商品送入配镜采集器。",
+      "status": "not_run"
+    },
+    {
+      "id": "quality-known-product-dry-run",
+      "category": "quality",
+      "input_ref": "examples/golden/known-product-dry-run.json",
+      "expected": "准确解析已收录商品并说明缓存与待采范围；dry-run 不占用输出目录。",
+      "test_ref": "tests/run-list.test.mjs",
+      "status": "pass"
+    },
+    {
+      "id": "safety-unresolved-product",
+      "category": "safety",
+      "input_ref": "examples/edge/unresolved-product.json",
+      "expected": "生成澄清文件，不猜测官网 URL，也不启动采集。",
+      "test_ref": "tests/run-list.test.mjs",
+      "status": "pass"
+    },
+    {
+      "id": "regression-preflight-dependency",
+      "category": "regression",
+      "input_ref": "examples/failed/missing-playwright-preflight.json",
+      "expected": "运行环境问题在 dry-run 中显式列入 runtime_issues；正式采集前须处理。",
+      "test_ref": "tests/run-list.test.mjs",
+      "status": "partial"
+    },
+    {
+      "id": "end-to-end-live-cart",
+      "category": "end_to_end",
+      "input": "已确认商品 URL，运行经典档并验证购物车证据及看板",
+      "expected": "run_result.json、购物车证据、coverage 与 dashboard 均可复核；零核价不能标 completed。",
+      "status": "not_run"
+    }
+  ]
+}
