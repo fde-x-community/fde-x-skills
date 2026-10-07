@@ -15,7 +15,9 @@ FDE-X Skill is an enterprise-grade skill repository open-sourced by the [FDE-X c
 **Every skill comes from a real enterprise need, and is used and validated in real enterprise settings**. 
 
 <!-- SKILLS:START -->
-_Skills distilled from real enterprise tasks are listed here. Contributions are welcome — start from a real enterprise need_
+| Skill | Description | Version | Maturity | Author |
+|---|---|---|---|---|
+| [`configurable-product-tracker`](skills/configurable-product-tracker/) | 将自然语言中的 Vooglam、Firmoo 商品名单和监测时间整理为标准输入，核验官网商品身份，实时采集镜框与镜片购物车报价并生成商品看板；也可读取历史或在明确要求时配置持续监测。 | 0.1.0 | draft | qinruipeng |
 <!-- SKILLS:END -->
 
 ## Enterprise Needs
