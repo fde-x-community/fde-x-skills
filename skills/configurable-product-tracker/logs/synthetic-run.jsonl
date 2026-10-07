@@ -1,0 +1,3 @@
+{"event":"resolution","status":"resolved","merchant":"Vooglam","product":"SampleFrame","market":"US","url_status":"official_url_confirmed"}
+{"event":"collection","status":"partial","verified_prices":1,"missing_paths":2,"evidence_status":"local_snapshot_recorded"}
+{"event":"delivery","status":"partial","dashboard":"dashboard/index.html","run_result":"run_result.json"}

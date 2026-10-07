@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "configurable-product-tracker/input.schema.json",
+  "title": "配镜商品名单请求",
+  "description": "skill.run_list 推荐的规范化 JSON 请求格式。运行器还接受顶层商品数组及 brand/name、period 等兼容别名；本 schema 用于规范化输入，采集档位由命令行 --tier 指定。",
+  "type": "object",
+  "required": ["products"],
+  "additionalProperties": true,
+  "properties": {
+    "products": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          {
+            "type": "string",
+              "pattern": "^\\s*([Vv]ooglam|[Ff]irmoo)(\\s*[-－—–:]\\s*|\\s+)\\S.*$",
+            "description": "品牌 - 准确商品名或型号"
+          },
+          {
+            "type": "object",
+            "required": ["merchant", "product"],
+            "additionalProperties": true,
+            "properties": {
+              "merchant": { "type": "string", "enum": ["Vooglam", "Firmoo"] },
+              "product": { "type": "string", "minLength": 1 },
+              "market": { "type": "string", "enum": ["US", "UK"], "default": "US" },
+              "url": { "type": "string", "format": "uri", "pattern": "^https://" }
+            },
+            "allOf": [
+              {
+                "if": { "properties": { "merchant": { "const": "Vooglam" } } },
+                "then": { "properties": { "market": { "const": "US" } } }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "monitoring_period": {
+      "type": "object",
+      "required": ["start", "end"],
+      "additionalProperties": true,
+      "properties": {
+        "start": { "type": "string", "format": "date" },
+        "end": { "type": "string", "format": "date" }
+      },
+      "description": "只控制看板默认展示范围，不伪造该时段内未采集的历史。"
+    }
+  }
+}

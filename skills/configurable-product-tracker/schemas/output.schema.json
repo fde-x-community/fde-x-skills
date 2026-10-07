@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "configurable-product-tracker/output.schema.json",
+  "title": "名单入口输出",
+  "description": "覆盖正式运行的 run_result.json、商品澄清文件，以及 dry-run 和环境预检打印到标准输出的状态对象。",
+  "oneOf": [
+    {
+      "type": "object",
+      "required": ["status", "products", "steps"],
+      "properties": {
+        "status": { "type": "string", "enum": ["completed", "partial", "failed"] },
+        "verified_prices": { "type": "integer", "minimum": 0 },
+        "dashboard": { "type": "string" },
+        "steps": { "type": "array", "items": { "type": "object" } },
+        "products": { "type": "array" },
+        "reused_today": { "type": "array" },
+        "cache_warnings": { "type": "array" },
+        "reason": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    {
+      "type": "object",
+      "required": ["status", "questions"],
+      "properties": {
+        "status": { "const": "needs_clarification" },
+        "questions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["input", "reason"],
+            "properties": {
+              "input": { "type": "object" },
+              "reason": { "type": "string", "minLength": 1 },
+              "candidates": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": ["status", "products", "needs_collection", "runtime_issues"],
+      "properties": {
+        "status": { "const": "resolved" },
+        "products": { "type": "array" },
+        "monitoring_period": { "type": "object" },
+        "period_user_specified": { "type": "boolean" },
+        "reused_today": { "type": "array" },
+        "needs_collection": { "type": "array" },
+        "cache_warnings": { "type": "array" },
+        "runtime_issues": { "type": "array" }
+      },
+      "additionalProperties": true
+    },
+    {
+      "type": "object",
+      "required": ["status", "issues"],
+      "properties": {
+        "status": { "const": "preflight_failed" },
+        "issues": { "type": "array", "minItems": 1 }
+      },
+      "additionalProperties": true
+    }
+  ]
+}

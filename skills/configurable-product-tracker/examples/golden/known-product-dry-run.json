@@ -1,0 +1,12 @@
+{
+  "case_id": "golden-known-product-dry-run",
+  "input_class": "已收录的 Vooglam 美国站普通眼镜",
+  "input": {
+    "products": [
+      { "merchant": "Vooglam", "product": "Okinawa", "market": "US" }
+    ]
+  },
+  "expected_behavior": "dry-run 使用已确认目录解析 Okinawa 的官网 URL，返回 status=resolved，并列出 needs_collection 或 reused_today；不联网核价、不创建输出目录。",
+  "acceptance_evidence": "运行 tests/run-list.test.mjs 的已收录商品测试；核对解析 URL 为 known_products.json 中的 goods-detail/9999，且输出目录不存在。",
+  "status": "pass"
+}

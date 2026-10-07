@@ -1,0 +1,11 @@
+[
+  {"lens_type": "Standard Lenses"},
+  {"lens_type": "Photochromic", "child": "Standard Photochromic"},
+  {"lens_type": "Photochromic", "child": "Photochromic Blue Light Blocking"},
+  {"lens_type": "Transitions®", "child": "Transitions® GEN S™"},
+  {"lens_type": "Transitions®", "child": "Transitions® XTRActive®"},
+  {"lens_type": "Transitions®", "child": "Transitions® XTRActive® Polarized™"},
+  {"lens_type": "Blue Light Blocking"},
+  {"lens_type": "Polarized Lenses"},
+  {"lens_type": "Driving Lenses"}
+]
