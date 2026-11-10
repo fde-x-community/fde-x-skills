@@ -1,0 +1,6 @@
+interface:
+  display_name: 销售咨询简报（通用版）
+  short_description: 把咨询转录整理成可逐字回溯的内部销售简报页
+  default_prompt: 使用 $sales-brief-generic 把这些咨询转录整理成可逐字回溯的销售简报，并逐条标注原话证据。
+policy:
+  allow_implicit_invocation: true

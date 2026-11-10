@@ -1,0 +1,29 @@
+{
+  "_note": "这是给你填的模板，不是可以直接用的配置。填完复制到通用版 skill 的 assets/industry-config.json。",
+  "_how_to_use": [
+    "1. 先只填 industry_terms：把你这行「一写就构成承诺/流程/身份断言」的词放进来，10–25 个。",
+    "2. 三个判据都过不了就删掉：谁在说 / 写了会改变销售动作吗 / 录音没有却写了会怎样。",
+    "3. completion_words 只补你行业特有的完成态说法，字段名只能是 payment / appointment / treatment。",
+    "4. required_question_topics 写「没问清就成交会出麻烦」的项。",
+    "5. 先以「只警告不拒收」跑 3–5 个真实案子，确认没有大量误伤再切强制模式。"
+  ],
+  "_acceptance_questions": [
+    "这个词出现时，通常是机构方在说，还是客户在说？",
+    "如果报告里写了它，销售会据此采取什么行动？",
+    "如果录音里根本没有它却写了，会造成什么后果？"
+  ],
+  "industry_terms": [],
+  "completion_words": [],
+  "post_action_words": [],
+  "required_question_topics": [
+    "预算与支付能力",
+    "决策人与陪同人",
+    "时间安排",
+    "既往相关经历"
+  ],
+  "medical_review_topic": "须由专业人员书面回答的问题",
+  "page": {
+    "notice": "内部分析草稿，未经人工复核，不构成专业意见",
+    "footer": "仅供授权内部使用"
+  }
+}

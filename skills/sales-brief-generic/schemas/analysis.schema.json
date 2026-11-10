@@ -1,0 +1,805 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "销售咨询简报 analysis.json（数据契约 v2）",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "case_id",
+    "summary",
+    "decision_stage",
+    "contact_policy",
+    "contact_note",
+    "transaction",
+    "money_math",
+    "not_found_claims",
+    "evidence",
+    "profiles",
+    "timeline",
+    "barriers",
+    "actions",
+    "oral_quotes",
+    "conflicts",
+    "unknowns",
+    "projects",
+    "client_facts",
+    "medical_review_questions",
+    "analysis_meta"
+  ],
+  "properties": {
+    "not_found_claims": {
+      "type": "array",
+      "description": "「未出现」类断言的自证清单（必填，可为空数组）。只要正文写了「未说明/未提及/没有回答/未见」等，就必须逐条登记：你用什么关键词去检索、检索结果如何。render 节点会拿这些关键词回到索引里真搜——搜到了就说明那句话其实存在，会拒收并指出在哪一行。真实教训：有分析写「顾问未说明两档差异的依据」，而原文明确讲了差异与差价；也有写「某附加项院方没答」，而同一话轮院方已明确回答。把「没读到」写成「不存在」是最误导读者的一类错。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claim",
+          "keywords"
+        ],
+        "properties": {
+          "claim": {
+            "type": "string",
+            "minLength": 1,
+            "description": "被断言「不存在/未出现」的具体信息，例如「顾问没有说明眼部两档的差异」。"
+          },
+          "keywords": {
+            "type": "array",
+            "minItems": 1,
+            "description": "你用来检索的关键词（至少 2 个字符），例如「差异」「区别」「两层」。脚本会逐个回到转录里搜。",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "evidence_id": {
+            "type": "string",
+            "description": "可选：如果该信息其实存在、只是出自另一方或别的条件，把那条原话收进 evidence 并在这里指向它；脚本会核对那条 evidence 的引文里确实含有关键词。"
+          },
+          "note": {
+            "type": "string",
+            "description": "可选：说明检索范围与结论（例如「S1 全部 587 话轮，客户侧确未提及」）。"
+          }
+        }
+      }
+    },
+    "money_math": {
+      "type": "array",
+      "description": "报价链算术（必填，可为空数组）：凡正文/条目里出现两个以上金额、或写到差额、月供、折扣、分项合计，就把算式逐条列在这里。render 节点会真的算出结果并与 result 比对，算错直接拒收。真实教训：三份独立分析都出现「全文零算术」，50008+8000 明明等于 58008 却被写成「无法闭合」，2999÷3 高于单价却被写成套餐划算。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "expr",
+          "result",
+          "note"
+        ],
+        "properties": {
+          "expr": {
+            "type": "string",
+            "minLength": 1,
+            "description": "算式，只允许数字、括号与 + - * /，例如「50008+8000」「2999/3」「15800-10800」。"
+          },
+          "result": {
+            "type": "number",
+            "description": "你算出的结果，保留两位小数以内。脚本会独立求值并比对。"
+          },
+          "note": {
+            "type": "string",
+            "minLength": 1,
+            "description": "这个算式在说明什么，例如「12800 加附加项 3000 等于 15800」「套餐折算后每单位高于单次价」。"
+          }
+        }
+      }
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "2.0",
+      "description": "固定 2.0。1.0 的文档缺 decision_stage/unknowns/conflicts/oral_quotes/analysis_meta，不能直接沿用。"
+    },
+    "case_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "客户代号（不要用真实姓名）。"
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "description": "自然语言概览；只能汇总下文有证据的项目。出现口头报价时必须在此处点明「口头」；覆盖不完整时必须点明抽样范围。"
+    },
+    "decision_stage": {
+      "type": "string",
+      "enum": [
+        "awareness",
+        "exploration",
+        "comparison",
+        "consideration",
+        "price_blocked",
+        "ready_for_next_step",
+        "verbally_agreed",
+        "opened",
+        "transaction_recorded",
+        "deferred",
+        "declined",
+        "unknown"
+      ],
+      "description": "意向阶段（必填）：awareness=刚了解；exploration=摸底项目；comparison=比价/比机构；consideration=进入方案讨论；price_blocked=卡在价格；ready_for_next_step=开始谈实施条件；verbally_agreed=口头同意但未开局；opened=已开单/已登记；transaction_recorded=有正式收款或预约记录；deferred=明确延后；declined=明确拒绝；unknown=无法判断。阶段判断须能在 timeline 里找到对应证据。"
+    },
+    "contact_policy": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "allowed",
+        "restricted",
+        "stop_all"
+      ],
+      "description": "联系许可状态；allowed 仅在转录里有明确的同意原话时使用，单向提议不算。"
+    },
+    "contact_note": {
+      "type": "string",
+      "minLength": 1,
+      "description": "说明联系范围与依据缺失；单向提议（顾问说“来扫我”）必须写成提议，不能写成已建立联系。"
+    },
+    "transaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payment",
+        "appointment",
+        "treatment"
+      ],
+      "properties": {
+        "payment": {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "oral_only",
+            "opened",
+            "verified"
+          ]
+        },
+        "appointment": {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "oral_only",
+            "opened",
+            "verified"
+          ]
+        },
+        "treatment": {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "oral_only",
+            "opened",
+            "verified"
+          ]
+        }
+      },
+      "description": "支付、预约、治疗状态分开记，四档：unknown=没线索；oral_only=只有口头意愿/口头安排；opened=已开单/已登记/已占位但未完成；verified=有可核验凭证。口头意愿或工作人员拟安排不得写成 verified。"
+    },
+    "transaction_evidence": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "value=verified 的项必须有可核验凭证描述；oral_only/opened 建议写清依据来源。"
+    },
+    "evidence": {
+      "type": "array",
+      "description": "原话证据；quote 必须是该话轮文本的连续子串。每条 evidence 必须至少被一个条目引用（孤儿证据会被校验拒收）。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "session_id",
+          "turn_id",
+          "quote",
+          "role",
+          "role_status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "session_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "turn_id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "索引里的 turn_id，形如 L5@00:00:20。"
+          },
+          "quote": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "原话角色候选，例如 客户候选 / 咨询顾问候选。"
+          },
+          "role_status": {
+            "type": "string",
+            "enum": [
+              "confirmed",
+              "candidate",
+              "unknown",
+              "mixed"
+            ],
+            "description": "confirmed 只用于有可靠身份依据的情况，不能只凭发言人编号确认；合并话轮写 mixed。"
+          }
+        }
+      }
+    },
+    "profiles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/factItem"
+      }
+    },
+    "timeline": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/factItem"
+      }
+    },
+    "barriers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/factItem"
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "content",
+          "purpose",
+          "condition",
+          "script",
+          "owner",
+          "done_when",
+          "scope",
+          "evidence_ids"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1
+          },
+          "purpose": {
+            "type": "string",
+            "minLength": 1
+          },
+          "condition": {
+            "type": "string",
+            "minLength": 1
+          },
+          "script": {
+            "type": "string",
+            "description": "对客话术；scope=internal 时必须为空串。"
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1
+          },
+          "done_when": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scope": {
+            "type": "string",
+            "enum": [
+              "internal",
+              "contact"
+            ]
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "kb_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "引用的知识条目 id，必须存在于当次知识库；未接入时不允许出现"
+          },
+          "kb_excerpts": {
+            "type": "array",
+            "description": "有 kb_refs 就必须有：引了哪张卡，就要把那张卡的原句摘出来",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "quote",
+                "used_for"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "used_for": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "term_status": {
+            "type": "string",
+            "enum": [
+              "confirmed",
+              "candidate",
+              "unknown"
+            ]
+          },
+          "kb_term": {
+            "type": "string",
+            "minLength": 1
+          },
+          "term_note": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "oral_quotes": {
+      "type": "array",
+      "description": "口头报价单列（每条都默认“非正式价格”）。有任何一条时，summary 必须出现「口头」。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "item",
+          "amount",
+          "by",
+          "evidence_ids"
+        ],
+        "properties": {
+          "item": {
+            "type": "string",
+            "minLength": 1,
+            "description": "项目名，如「鼻部（肋软骨+膨体）」。"
+          },
+          "amount": {
+            "type": "string",
+            "minLength": 1,
+            "description": "按原文写法照抄的金额/口径，如「39320」「2999 四瓶」「一万零八百」。"
+          },
+          "by": {
+            "type": "string",
+            "minLength": 1,
+            "description": "报价方，如「咨询顾问」「总监」「机构经理」。"
+          },
+          "note": {
+            "type": "string",
+            "description": "可选：该口径的限定（如「周年庆八折后」「不含杂费」）。"
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "description": "同一事实的多口径并列。至少有 2 个版本，不允许私自抹平成一个数。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "item",
+          "versions",
+          "evidence_ids"
+        ],
+        "properties": {
+          "item": {
+            "type": "string",
+            "minLength": 1,
+            "description": "冲突项，如「活动套餐瓶数」「鼻部价格」。"
+          },
+          "versions": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "string"
+            },
+            "description": "并列的各版本口径，各带来源。"
+          },
+          "note": {
+            "type": "string",
+            "description": "可选：为什么仍无法确定，以及需要向谁核实。"
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "unknowns": {
+      "type": "array",
+      "description": "未知待问清单：没问到的不等于没有。用于承载“下一步必须先问清什么”。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "item",
+          "why"
+        ],
+        "properties": {
+          "item": {
+            "type": "string",
+            "minLength": 1,
+            "description": "未知项，如「真实预算上限」「术前 CT 是否已拍」。"
+          },
+          "why": {
+            "type": "string",
+            "minLength": 1,
+            "description": "为什么未知（未提及 / 口径冲突 / 只有转述），以及该怎么问。"
+          }
+        }
+      }
+    },
+    "projects": {
+      "type": "array",
+      "minItems": 1,
+      "description": "项目状态一览（至少一项）：本次对话涉及或提到的每个项目各一条，回答“客户对这个项目了解到哪一步”。多项目客户不能只写主诉那一个。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "status",
+          "evidence_ids"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "项目名，如「眼部（埋线修复）」「鼻部」「斑」「下颌角」。"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "mentioned",
+              "exploring",
+              "comparing",
+              "decided",
+              "declined",
+              "deferred",
+              "done",
+              "unknown"
+            ],
+            "description": "mentioned=机构提到、客户未表态；exploring=客户在了解；comparing=在比价/比机构；decided=已定方案；declined=明确不做；deferred=明确延后；done=本次已完成；unknown=无法判断。"
+          },
+          "note": {
+            "type": "string",
+            "description": "可选：该项目的关键限定（如「因倒班暂缓」「仅机构提起」）。"
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "client_facts": {
+      "type": "array",
+      "description": "结构化客户事实：既往相关经历、已知限制与禁忌、职业与作息、陪同人、决策人等。已知的写值，未知的写 state=unknown 并说明没问过——不要留空不写。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "item",
+          "state"
+        ],
+        "properties": {
+          "item": {
+            "type": "string",
+            "minLength": 1,
+            "description": "事实项，如「既往相关经历」「已知限制与禁忌」「时间窗与档期」「职业与作息」「陪同人」「决策人」。"
+          },
+          "value": {
+            "type": "string",
+            "description": "已知时的取值；未知时省略或写空。"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "confirmed_by_client",
+              "likely_client",
+              "staff_claim",
+              "unknown"
+            ],
+            "description": "confirmed_by_client=客户本人说过且证据角色也为 confirmed；likely_client=疑为客户说法（证据角色 candidate/mixed 时用这一档，必须写 value 与证据）；staff_claim=只有机构/他人说法；unknown=没问过或无法确认。"
+          },
+          "note": {
+            "type": "string",
+            "description": "可选：限定或需核实之处。"
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "medical_review_questions": {
+      "type": "array",
+      "description": "需要交给有资质医务人员书面回答的问题。凡是涉及适应证、禁忌、风险概率、能否操作的事项，一律写成问题，不得由销售侧直接下判断。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "question",
+          "why"
+        ],
+        "properties": {
+          "question": {
+            "type": "string",
+            "minLength": 1,
+            "description": "要问医生的问题，如「该情况是否属于禁忌？」「两套方案在风险与预期上有什么差别」。"
+          },
+          "why": {
+            "type": "string",
+            "minLength": 1,
+            "description": "为什么必须由医生回答：客户已问、存在禁忌不确定、涉及风险口径等。"
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "analysis_meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "coverage",
+        "turns_read",
+        "sessions",
+        "limitations"
+      ],
+      "properties": {
+        "coverage": {
+          "type": "string",
+          "enum": [
+            "full",
+            "partial"
+          ],
+          "description": "full=全量读完全部话轮；partial=抽样。partial 时必须写 limitations。"
+        },
+        "turns_read": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "实际读到的话轮数（应与索引 turns 数一致）。"
+        },
+        "sessions": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "本次分析的局限（未听音频、合并话轮、ASR 噪声等）；coverage=partial 时不得为空。"
+        }
+      }
+    },
+    "kb_basis": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "可选：声明本次依据的知识库（connected 必须与是否真的接入一致）"
+    },
+    "kb_gaps": {
+      "type": "array",
+      "description": "接入知识库时必填（没有缺口写 []）：缺口要写清缺什么、降到谁那里、哪些相邻卡不得拿来顶替",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "topic",
+              "evidence_turns"
+            ],
+            "properties": {
+              "topic": {
+                "type": "string",
+                "minLength": 1
+              },
+              "why_missing": {
+                "type": "string"
+              },
+              "fallback": {
+                "type": "string"
+              },
+              "must_not_use_cards": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "evidence_turns": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "kb_unused_notes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "可选：{卡片id: 为什么刻意不引用它}；键必须是真实存在的卡片"
+    },
+    "input_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kb_fingerprint",
+        "transcripts"
+      ],
+      "properties": {
+        "kb_fingerprint": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transcripts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "description": "接入知识库时必需：声明本次分析依据的转录 sha256 与知识库指纹（index 阶段的输出里已给出，直接抄）"
+    }
+  },
+  "definitions": {
+    "factItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "text",
+        "status",
+        "evidence_ids"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "description": "描述文字。引号「」内的片段必须逐字出现在被引用证据的 quote 里；不得把推断词（如“避免”“与…无关”）放进引号。"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "stated",
+            "other",
+            "inferred",
+            "unknown",
+            "pending_confirmation",
+            "conflict"
+          ],
+          "description": "stated=客户本人表达（不得引用 mixed/unknown 证据，也不得写成机构口径）；other=他人/机构说法；inferred=分析推断；unknown=待确认；pending_confirmation=归属待复听（role_status 为 candidate/mixed 时用这一档）；conflict=存在冲突。"
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "kb_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "引用的知识条目 id，必须存在于当次知识库；未接入知识库时不允许出现（防止把模型常识伪装成企业知识）"
+        },
+        "kb_excerpts": {
+          "type": "array",
+          "description": "有 kb_refs 就必须有：引了哪张卡，就要把那张卡的原句摘出来，供销售回查",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "quote",
+              "used_for"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "quote": {
+                "type": "string",
+                "minLength": 1,
+                "description": "该卡片正文里的连续片段（比对忽略空白与全半角标点）"
+              },
+              "used_for": {
+                "type": "string",
+                "minLength": 1,
+                "description": "这段卡片原文支撑本条哪一句；必须是本条标题或正文的子串"
+              }
+            }
+          }
+        },
+        "term_status": {
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "candidate",
+            "unknown"
+          ],
+          "description": "术语三态：confirmed=就是知识库这条；candidate=疑似（写 term_note）；unknown=认不出（写 term_note，不猜）"
+        },
+        "kb_term": {
+          "type": "string",
+          "minLength": 1,
+          "description": "term_status=confirmed 时必填：知识库里的正确写法"
+        },
+        "term_note": {
+          "type": "string",
+          "minLength": 1,
+          "description": "candidate/unknown 时必填；候选必须含「疑似/待核」字样"
+        }
+      }
+    }
+  }
+}

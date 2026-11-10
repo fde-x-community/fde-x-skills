@@ -1,0 +1,259 @@
+{
+  "id": "sales-brief-generic",
+  "name": "销售咨询简报（通用版）",
+  "version": "0.8.1-kb",
+  "description": "受控状态机的销售咨询简报（行业无关骨架）：**行业配置是可选项**——有配置就按该行业出稿（词表与必问项更贴合、行业词校验更严）；没有配置也能直接按通用词表出稿，页面与 run 输出都会标注「基于通用词表、不是行业特异」，这是正常路径而非失败；想要行业特异而手上还没有配置时，可先跑「行业配置冷启动」（bootstrap-industry-config）从真实转录生成，产物留在工作目录、不替换技能包。**preflight 节点（agent）在出简报之前先做行业配置自检**——**工作目录**里有没有可用的行业配置（industry-config*.json 类文件，判据是 industry_terms 非空；工作目录优先，技能包自带 assets/industry-config.json 只是通用模板、永远保持通用）与可读的行业知识库（知识条目.jsonl / 02_结构化数据 / 知识库目录）；缺配或需要完善时询问用户是否先跑「行业配置冷启动」（bootstrap-industry-config），同意就把它跑完、**逐条与用户确认冷启动留下的待定事项，并明确告知「已完成行业适配、接下来按该行业出简报」**后再继续（两个 skill 由此串联；冷启动配置落在工作目录、不替换技能包；收尾可询问是否基于词表注册行业专用 skill）；用户选择不跑则按通用词表出稿，H5 页首与 run 输出都标注「基于通用词表、不是行业特异」。preflight 把本次生效的配置基准写进 <out_dir>/industry-mode.json，render 据此决定行业词校验开不开、并渲染页首横幅。参数 industry_check=auto|skip|bootstrap|generic 可控制是否询问、是否强制通用；index 节点把录音转录索引成可逐字回溯的话轮（原始行号 + 输入 SHA-256），并产出每 100 话轮切分的分段通读稿与输入审计；extract 节点由 agent 先读输入审计定归属、再分段通读，产出结构化分析（画像 / 意向变化 / 决策阻碍 / 行动建议 / 口头报价 / 口径冲突 / 未知待问，每条带原话证据）；render 节点机械校验引用连续子串、归属与完成态、孤儿证据、引号落地、正文数字出处、契约外字段，**并且总是渲染离线 H5**——正文与证据照常排版，核对清单**默认折叠、放在页面最底部**（不挡第一屏）；随后 **polish 节点（agent）按清单与已渲染页面就地修 analysis.json**，把能在页面语境内修掉的问题改掉（算式结论落进正文、归属措辞改到与档位一致、对客话术去掉未发生的后续安排等），**只有它明确修不掉的条目才进 residual**；finalize 节点读回修好的文档复跑校验与渲染，产出交付版页面——页底折叠面板只呈现 residual，「修干净了」就是一份没有技术尾巴的成品。只有 analysis 缺失或渲染异常时才降级为只承载核对清单的占位页（「没通过核对」和「没有页面」是两件事）。行业词表、枚举、标签来自**工作目录里的行业配置**（<out_dir>/industry-config*.json，工作目录优先；找不到才回落技能包自带通用模板，模板不被行业配置替换）；industry_terms 为空数组时，该行业流程词校验自动关闭。语义由 agent 负责，脚本只核对与排版；不联网、不发送消息、不预约、不收款、不写业务系统。 **v0.8.0-kb 新增可选知识库接入**：输入带 `knowledge_base_dir` 时，索引逐话轮产出知识库术语命中（只认正确写法）与已知误写提示（只提示、原话不改），analysis 的知识引用必须双可回查（`kb_refs` + 卡片原文片段 `kb_excerpts.used_for`）、缺口必须结构化（`kb_gaps`，含 `evidence_turns` 与禁止替代的相邻卡 `must_not_use_cards`）、并声明 `input_binding`（转录 sha256 + 知识库指纹）；校验拦截：引用不存在的卡片、片段不在卡里、缺口点名禁用的卡仍被引用、缺口主题与已有卡片撞车（可能已过期）、知识库同 ID 正文冲突、拿旧索引配新库（被引卡片正文没变则降级为警告）。不接知识库时行为与 v0.7.0 一致，只是页面不含任何知识依据；给了目录却读不出来默认直接失败，只有显式 `kb_missing_policy=degrade` 才降级并在页首标注。 **v0.8.1-kb：知识库与词表同构**——库目录按「显式参数 → 运行目录约定位置（含冷启动落点 industry-config/knowledge-base）→ 命名像知识库的子目录 → 行业配置 knowledge_base.dirs → 转录目录」自动发现（判据：能读出 ≥1 条 id 合法条目）；库形状配置改由本次生效的行业配置提供；index 阶段写 <out_dir>/kb-mode.json 基准（来源/指纹/记录数/试过的候选），页首横幅标来源；显式给了却读不出仍默认失败、degrade 才降级。",
+  "entrypoint": "node scripts/run.mjs {{inputPath}} {{outputPath}} --stage index",
+  "inputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "transcripts",
+      "out_dir"
+    ],
+    "properties": {
+      "transcripts": {
+        "type": "array",
+        "minItems": 1,
+        "description": "同一客户的转录列表；同一客户多次咨询用不同 session_id 并给 sequence 标先后。每个元素一份独立索引，会话之间不串场。",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "session_id",
+            "path"
+          ],
+          "properties": {
+            "session_id": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "description": "本会话的唯一代号（如 S1、S2）。只用字母数字下划线连字符：它同时是索引文件名的一部分，重复会互相覆盖。"
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1,
+              "description": "转录 txt 路径。建议给绝对路径（运行时的相对路径基准是 skill 目录）。格式必须是每行 [hh:mm:ss] 发言人：文本；其他格式或跨行内容需先转换并人工核对。"
+            },
+            "sequence": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "同一客户多次咨询的先后顺序；不提供就整个省略，不猜测次序。"
+            },
+            "session_date": {
+              "type": "string",
+              "minLength": 1,
+              "description": "会话基准日期 YYYY-MM-DD；不提供就省略，脚本不换算相对日期。"
+            }
+          }
+        }
+      },
+      "out_dir": {
+        "type": "string",
+        "minLength": 1,
+        "description": "运行目录：索引 <session_id>.index.json、analysis.json、校验结果.json 与 销售简报.html 都写在这里。含敏感资料，应放在技能包之外的授权私有目录。"
+      },
+      "case_id": {
+        "type": "string",
+        "minLength": 1,
+        "description": "客户代号（不要用真实姓名）。给了就锁定 analysis.case_id，agent 提交的代号不一致会判为 needs_revision；不给则由 agent 自拟。"
+      },
+      "industry_check": {
+        "type": "string",
+        "enum": [
+          "auto",
+          "skip",
+          "bootstrap",
+          "generic"
+        ],
+        "description": "preflight 节点（行业配置自检）的行为：auto=默认，目录里没可用行业配置就询问是否先跑「行业配置冷启动」，已有配置但本次是新转录则询问是否完善；skip=不问，直接用现有配置开跑（批量/自动化场景用）；bootstrap=不问，强制先跑一轮冷启动再出简报；generic=不问，强制按通用词表出稿（行业词校验关闭，H5 页首与 run 输出都标注「不是行业特异」）——用于「先要一份稿子、行业适配以后再说」。"
+      },
+      "knowledge_base_dir": {
+        "type": "string",
+        "minLength": 1,
+        "description": "可选：企业行业知识库目录（只读）。默认读它下面的 02_结构化数据/知识条目.jsonl（每行一条、至少要有 id），找不到则递归找「知识条目*.jsonl」；术语词典可选。给了就必须能读出来，否则本 run 直接失败（除非 kb_missing_policy=degrade）。"
+      },
+      "kb_missing_policy": {
+        "type": "string",
+        "enum": [
+          "error",
+          "degrade"
+        ],
+        "description": "可选，默认 error：给了 knowledge_base_dir 但读不出知识库时直接失败（不允许「以为接了其实没接」）；degrade 表示显式降级为「未接入」继续跑，页面页首会标注「不可用，已显式降级」，且不允许出现任何知识依据。"
+      }
+    }
+  },
+  "outputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "status",
+      "sessions",
+      "h5",
+      "validation",
+      "execution_status"
+    ],
+    "properties": {
+      "status": {
+        "type": "string",
+        "enum": [
+          "index_only",
+          "rendered",
+          "needs_revision"
+        ],
+        "description": "index_only=index 节点的产出（只索引，未校验未渲染）；rendered=polish 修复后复跑校验与渲染通过、已产出交付版 H5（不等于语义/医学/授权已核实）；needs_revision=finalize 阶段仍有校验错误或 residual（agent 明确修不掉的条目）：H5 仍会生成，页底折叠面板列出这些条目。"
+      },
+      "sessions": {
+        "type": "array",
+        "minItems": 1,
+        "description": "每个会话一条索引摘要，顺序与 transcripts 一致。",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "session_id",
+            "turns",
+            "unparsed_lines",
+            "index_path"
+          ],
+          "properties": {
+            "session_id": {
+              "type": "string"
+            },
+            "turns": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "解析出的话轮数。"
+            },
+            "unparsed_lines": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "未按格式解析的行数；首两行会被标为可能标题，其余未解析正文会让校验失败。"
+            },
+            "index_path": {
+              "type": "string",
+              "description": "索引文件路径。"
+            },
+            "term_hit_turns": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "index 阶段：该会话里命中知识库术语的话轮数（未接入时为 0）"
+            }
+          }
+        }
+      },
+      "h5": {
+        "type": "string",
+        "description": "销售简报 HTML 的路径。render 阶段先渲染一版（核对清单折叠在页底），polish 修复后由 finalize 复渲染交付版；analysis 缺失或渲染异常时是只承载核对清单的占位页。"
+      },
+      "validation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "checked",
+          "ok",
+          "errors"
+        ],
+        "properties": {
+          "checked": {
+            "type": "boolean",
+            "description": "是否真的执行了机械校验。"
+          },
+          "ok": {
+            "type": "boolean",
+            "description": "校验是否零错误；false 不代表内容错误，只代表未通过机械规则。"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "逐条校验错误；不得为了通过而改写原话或掩盖不确定性。"
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "逐条提醒：不阻断渲染，但需要人看一眼。典型是「引文未落地」——正文提到的行业词在转录里确实说过，只是这条内容没有引到它。"
+          }
+        }
+      },
+      "industry_basis": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source",
+          "generic",
+          "industry_terms"
+        ],
+        "description": "本份产物的配置基准：告诉使用者「这份稿子是按行业配置出的，还是按通用词表出的」。来源是 preflight 写的 <out_dir>/industry-mode.json；缺文件时 source=unknown、generic=false，H5 页首会明说「基准未标注」。",
+        "properties": {
+          "source": {
+            "type": "string",
+            "description": "reused / bootstrapped / user_skipped / generic / unknown。"
+          },
+          "generic": {
+            "type": "boolean",
+            "description": "true=按通用词表出稿，行业词校验已关闭。"
+          },
+          "industry_terms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "实际生效的 industry_terms 词数；generic=true 时为 0。"
+          },
+          "industry_label": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string",
+            "description": "人话说明：这份产物是不是行业特异。"
+          }
+        }
+      },
+      "execution_status": {
+        "type": "string",
+        "enum": [
+          "no_action_executed"
+        ],
+        "description": "常量：本 skill 从不执行对客动作或业务写入。"
+      },
+      "kb": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "本次 run 的知识库摘要：connected（是否接入）、records/terms（条数/术语数）、fingerprint（前 16 位）、conflicts（同 ID 不同正文的条目）。"
+      },
+      "kb_status": {
+        "type": "string",
+        "description": "知识库状态一句话（已接入多少条 / 未接入 / 已显式降级），页面页首同款文案。"
+      },
+      "input_binding": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "仅 index 阶段且接入知识库时给出：{kb_fingerprint, transcripts:{session_id: sha256}}，agent 写 analysis 时原样抄进同名顶层字段。"
+      },
+      "kb_report": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "仅 render/finalize 阶段给出：知识库体检（命中/引用/命中未引用已说明与未说明/引用未签审/缺口数/禁用卡/片段数）。"
+      },
+      "kb_source": {
+        "type": "string",
+        "description": "知识库从哪发现的：param（显式参数）/config（行业配置声明）/out_dir（运行目录）/transcript_dir（转录目录）/none（未接入）"
+      },
+      "kb_tried": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        },
+        "description": "试过但不可用的知识库候选（排查「为什么没接上」）"
+      }
+    }
+  },
+  "timeout_ms": 120000,
+  "log_structure": {
+    "events": [
+      "run_note"
+    ]
+  }
+}

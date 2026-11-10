@@ -17,7 +17,9 @@ FDE-X Skill 是 [FDE-X 社区](https://fde-x.com) 开源的企业级 skill 仓�
 <!-- SKILLS:START -->
 | Skill | 说明 | 版本 | 成熟度 | 作者 |
 |---|---|---|---|---|
+| [`bootstrap-industry-config`](skills/bootstrap-industry-config/) | 从某行业的真实对话转录与多轮业务问答冷启动出一份可用的行业配置（词表、必问项、页面措辞、知识库对齐），供 sales-brief-generic 按行业特异出稿；仅在已有转录、想要行业特异而尚无配置、或需要继续收敛上一版草案时使用，它不产出销售简报。 | 0.3.0 | draft | weiweiweizizi |
 | [`configurable-product-tracker`](skills/configurable-product-tracker/) | 将自然语言中的 Vooglam、Firmoo 商品名单和监测时间整理为标准输入，核验官网商品身份，实时采集镜框与镜片购物车报价并生成商品看板；也可读取历史或在明确要求时配置持续监测。 | 0.1.0 | draft | qinruipeng |
+| [`sales-brief-generic`](skills/sales-brief-generic/) | 把销售咨询录音的转录（每行 [HH:MM:SS] 发言人：文本）索引成可逐字回溯的话轮，由 agent 节点做语义分析、脚本机械校验并渲染离线内部销售简报 H5，产出意向阶段、口头报价链、决策阻碍、未知待问与下一步行动；用户要求整理销售/咨询/面诊/导购录音、出客户跟进简报、核… | 0.8.1 | draft | weiweiweizizi |
 <!-- SKILLS:END -->
 
 ## 企业需求

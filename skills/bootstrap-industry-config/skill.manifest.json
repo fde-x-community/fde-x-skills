@@ -1,0 +1,246 @@
+{
+  "id": "bootstrap-industry-config",
+  "name": "行业配置冷启动",
+  "version": "0.3.0-kb",
+  "description": "【可选组件】通用版 sales-brief-generic 没有行业配置也能按通用词表出稿（页面与输出会标注「不是行业特异」）；只有需要行业特异时才需要跑本 skill。从一个行业的真实对话转录出发，围绕已有转录与 agent 多轮对话、逐步收敛出一份可用的行业配置（词表 / 必问项 / 页面措辞）。一次 run 推进一轮：带上一轮的 draft 与业务方对上一轮问题的 answers 续跑，check 阶段产出配置草案、干跑报告与 open-questions.md，并给出收敛判定（ready_for_review / needs_more_rounds）。不产出销售简报，只产出让通用版 sales-brief-generic 在该行业跑起来所需的配置。配置**留在当前运行目录**（不替换通用版技能包），由通用版 run 从工作目录自动发现；如需固化，可询问业务方后基于这份词表注册行业专用 skill。多轮迭代不会堆积文件：当前状态覆盖写、历史只追加进 dialog.jsonl、索引按转录 SHA-256 幂等复用。不做业务判断；词表最终由业务负责人确认。不联网、不发送消息、不写业务系统。 **v0.3.0-kb 新增知识库对齐**：冷启动不只抽词表，也把用户提供的知识库材料（jsonl/json/csv/md/txt/html，格式可混用；docx/pdf/xlsx 需先导出文本）对齐成统一格式落在工作目录 `<out_dir>/knowledge-base/`——kb-scan（脚本盘点格式与字段）→ kb-align（agent 决定字段映射/切分/机构事实/缺口）→ kb-apply（脚本机械落盘：知识条目.jsonl + 术语词典 + 机构事实层 + 源映射 + 报告 + 待确认问题）。用户**不提供知识库**时产出显式的空库与缺口声明，让下游「未接入」可审计；机构价目/资质/排期一律拆到机构事实层，不混进行业知识。通用版 sales-brief-generic 会从工作目录自动发现这份知识库。",
+  "entrypoint": "node scripts/run.mjs {{inputPath}} {{outputPath}} --stage index",
+  "inputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "transcripts",
+      "out_dir"
+    ],
+    "properties": {
+      "transcripts": {
+        "type": "array",
+        "minItems": 1,
+        "description": "该行业的真实对话转录（至少一份，越多抽得越准）。格式：每条一行 [hh:mm:ss] 发言人N：文本",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "session_id",
+            "path"
+          ],
+          "properties": {
+            "session_id": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      "out_dir": {
+        "type": "string",
+        "minLength": 1,
+        "description": "输出目录：索引、分段稿、配置草案与报告都写在这里"
+      },
+      "industry_name": {
+        "type": "string",
+        "minLength": 1,
+        "description": "行业名称（如「房产中介」「课程顾问」）；不给则由 agent 从转录推断"
+      },
+      "draft": {
+        "type": "object",
+        "description": "上一轮或人工修订后的配置草案。给定时 check 阶段优先用 bootstrap 节点的提交物，没有提交物才回落到这里——用于多轮迭代时直接复跑校验，不必重走一遍 agent 抽取。"
+      },
+      "answers": {
+        "type": "object",
+        "description": "对上一轮 open-questions.md 里问题的回答。zero_hit 形如 {\"空腹\":\"keep\"}，overlaps_resolved 形如 [\"合同|购房合同\"]。它只影响收敛判定，不会改动草案本身。"
+      },
+      "round": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "显式指定轮次号；不给则按 dialog.jsonl 已有行数 + 1 自动推算。"
+      },
+      "keep_snapshot": {
+        "type": "boolean",
+        "description": "为 true 时额外写一份 snapshot-round-<N>/industry-config.draft.json 独立快照。默认 false：目录里始终只有当前状态 + 一个追加式的 dialog.jsonl，文件数不随轮数增长。"
+      },
+      "knowledge_base": {
+        "description": "可选：知识库材料，一个路径或路径数组（文件或目录，目录会递归展开）。支持 .jsonl/.json/.md/.markdown/.txt/.csv/.tsv/.html；docx/pdf/xlsx/zip 等二进制会进「不支持」清单并要求导出文本。不给、或给了但一个条目都读不出，都按「没有知识库」处理（产出显式空库）。",
+        "oneOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ]
+      },
+      "kb_draft": {
+        "type": "object",
+        "description": "上一轮的知识库对齐计划（kb-align 提交的 plan 原文）。给定时 kb-apply 优先用本次 kb-align 的提交物，没有提交物才回落到这里——用于多轮只改映射、不重扫材料。"
+      }
+    }
+  },
+  "outputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "status",
+      "execution_status"
+    ],
+    "properties": {
+      "status": {
+        "type": "string",
+        "enum": [
+          "index_only",
+          "drafted",
+          "needs_revision",
+          "kb_scanned",
+          "kb_applied"
+        ]
+      },
+      "sessions": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        },
+        "description": "index 阶段：每个会话的索引摘要；其它阶段为空数组"
+      },
+      "config_path": {
+        "type": "string",
+        "description": "check 阶段：配置草案路径（其它阶段为空串）"
+      },
+      "report_path": {
+        "type": "string",
+        "description": "check 阶段：报告路径（其它阶段为空串）"
+      },
+      "execution_status": {
+        "type": "string",
+        "enum": [
+          "no_action_executed"
+        ]
+      },
+      "kb_dir": {
+        "type": "string",
+        "description": "kb-apply：对齐后的知识库目录"
+      },
+      "kb_report_path": {
+        "type": "string",
+        "description": "kb-apply：kb-report.md 路径"
+      },
+      "kb_questions_path": {
+        "type": "string",
+        "description": "kb-apply：kb-open-questions.md 路径"
+      },
+      "kb_status": {
+        "type": "string",
+        "description": "kb-apply：知识库对齐结论一句话"
+      },
+      "kb_entries": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "行业知识条目数"
+      },
+      "kb_terms": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "术语词典条目数"
+      },
+      "kb_scan_path": {
+        "type": "string",
+        "description": "kb-scan 阶段：盘点结果 kb-scan.json 路径"
+      },
+      "provided": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "kb-scan：用户给的输入个数"
+      },
+      "files": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "kb-scan：可解析的文件数"
+      },
+      "total_bytes": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "kb-scan：可解析文件总字节"
+      },
+      "formats": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "integer"
+        },
+        "description": "kb-scan：格式分布"
+      },
+      "unsupported": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "kb-scan：不支持/未解析的文件数"
+      },
+      "missing": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "kb-scan：路径不存在的个数"
+      },
+      "summary": {
+        "type": "string",
+        "description": "kb-scan：给 agent 读的材料摘要"
+      },
+      "suggested_plan": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "kb-scan：建议的对齐计划（字段映射猜测）"
+      },
+      "kb_source_map_path": {
+        "type": "string",
+        "description": "kb-apply：kb-source-map.json 路径"
+      },
+      "entries": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "kb-apply：行业知识条目数"
+      },
+      "terms": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "kb-apply：术语词典条目数"
+      },
+      "institution_facts": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "kb-apply：拆到机构事实层的条目数"
+      },
+      "issues": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "kb-apply：未对齐/坏行数"
+      },
+      "conflicts": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "kb-apply：同 ID 冲突数"
+      },
+      "empty": {
+        "type": "boolean",
+        "description": "kb-apply：是否产出显式空库（没提供材料时）"
+      },
+      "questions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "kb-apply：待业务方确认的问题"
+      }
+    }
+  },
+  "timeout_ms": 120000,
+  "log_structure": {
+    "events": [
+      "run_note"
+    ]
+  }
+}

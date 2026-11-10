@@ -1,0 +1,5 @@
+{"event_id":"SYN-20261105-01","timestamp":"2026-11-05T10:00:02+08:00","mission_id":"SYN-MISSION-01","run_id":"SYN-RUN-01","event":"run","event_result":"partial","evidence_refs":["out_dir/input-audit.json#sha256:demo"]}
+{"event_id":"SYN-20261105-02","timestamp":"2026-11-05T10:00:05+08:00","mission_id":"SYN-MISSION-01","run_id":"SYN-RUN-01","event":"stage_boundary","event_result":"pass","evidence_refs":["out_dir/S1.index.json#turn_count"]}
+{"event_id":"SYN-20261105-03","timestamp":"2026-11-05T10:00:41+08:00","mission_id":"SYN-MISSION-01","run_id":"SYN-RUN-01","event":"validator_verdict","event_result":"fail","evidence_refs":["out_dir/校验结果.json#errors[0]"]}
+{"event_id":"SYN-20261105-04","timestamp":"2026-11-05T10:01:10+08:00","mission_id":"SYN-MISSION-01","run_id":"SYN-RUN-01","event":"human_interaction","event_result":"pass","evidence_refs":["out_dir/industry-mode.json#source"]}
+{"event_id":"SYN-20261105-05","timestamp":"2026-11-05T10:02:03+08:00","mission_id":"SYN-MISSION-01","run_id":"SYN-RUN-01","event":"human_handoff","event_result":"blocked","evidence_refs":["out_dir/销售简报.html#residual-panel"]}

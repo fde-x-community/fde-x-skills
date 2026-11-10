@@ -1,0 +1,7 @@
+interface:
+  display_name: "行业配置冷启动"
+  short_description: "从真实对话转录冷启动行业词表、必问项与知识库配置草案"
+  default_prompt: "使用 $bootstrap-industry-config 从真实行业对话转录冷启动行业配置草案，统计词表命中并列出需要业务方确认的问题；不要产出销售简报。"
+
+policy:
+  allow_implicit_invocation: true

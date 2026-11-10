@@ -1,0 +1,60 @@
+{
+  "name": "golden-bootstrap-to-drafted-config",
+  "input_class": "单会话合成转录 + agent 按三个判据抽出的配置草案",
+  "case_type": "正常路径：index → bootstrap → check",
+  "input": {
+    "transcripts": [
+      {
+        "session_id": "S1",
+        "path": "examples/fixtures/synthetic.txt"
+      }
+    ],
+    "out_dir": "out/SYN-01",
+    "industry_name": "课程顾问"
+  },
+  "expected_behavior": [
+    "index 节点：切出 7 个话轮，首行「咨询录音转写示例」不是话轮、留在 unparsed_lines 里（possible_title=true），并写出 S1.segments.md（1 段，因为不足 100 话轮）。",
+    "bootstrap 节点：agent 先看索引里的 speaker 分布定顾问/客户，再逐段读分段稿，按三个判据筛词，提交 { draft }。",
+    "check 节点：validateDraft 零错误 → status=drafted，写 industry-config.draft.json 与 bootstrap-report.md。",
+    "报告逐词给出出现话轮数：定金 3、分期 1、手续费 1、名额 1，全部大于 0，因此不会出现「从未出现需人工判断」那一段。"
+  ],
+  "draft": {
+    "industry_terms": ["定金", "分期", "手续费", "名额"],
+    "completion_words": [["已付清", "payment"]],
+    "post_action_words": [],
+    "required_question_topics": ["预算与支付方式", "决策人与陪同人", "退费政策", "开课时间"],
+    "medical_review_topic": "须由教务/法务书面确认的问题",
+    "page": {
+      "notice": "内部分析草稿，未经人工复核，不构成招生承诺",
+      "footer": "仅供授权内部使用"
+    }
+  },
+  "forbidden_behavior": [
+    "因为词全部命中就宣称「这份配置已适配课程顾问行业」。",
+    "把干跑的命中次数当成词表质量的证据。",
+    "把「格式校验通过」写成业务正确或已获业务方确认。"
+  ],
+  "acceptance": {
+    "status": "drafted",
+    "validation_errors": 0,
+    "industry_terms": 4,
+    "dry_run_hits": {
+      "定金": 3,
+      "分期": 1,
+      "手续费": 1,
+      "名额": 1
+    },
+    "report_contains": ["逐词出现次数", "定金"],
+    "workflow_nodes": ["index", "bootstrap", "check"]
+  },
+  "acceptance_evidence": [
+    "tests/run.test.mjs: check 阶段写出草案与报告，并把「从未出现」标为需人工判断",
+    "tests/cases.json: check-node-drafted 用同一份 draft 与同一份夹具转录断言 status=drafted 与产物路径",
+    "examples/fixtures/synthetic.txt 是 7 话轮的合成数据，不含任何真实客户信息"
+  ],
+  "why_this_is_golden": [
+    "四个词都是顾问亲口说的承诺项，写进报告而没有原话支撑就会变成虚假承诺。",
+    "必问项不是套模板：客户说「得回去跟爱人商量」→ 决策人与陪同人；客户说「怕退不了」→ 退费政策。这两项销售当场都没答清。",
+    "没有放「价格」「课程」「咨询」这类行业常用词——写了也不构成承诺，只会制造误报。"
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "industry-config.schema.json",
+  "title": "行业配置草案（bootstrap 节点产物，同时是通用版 assets/industry-config.json 的结构）",
+  "description": "三个必填键决定「哪些词必须有原话支撑、哪些词代表交易已发生、成交前必须问清什么」。下划线开头的键是注释，允许存在且不参与校验。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["industry_terms", "completion_words", "required_question_topics"],
+  "properties": {
+    "industry_terms": {
+      "type": "array",
+      "description": "一旦正文写了它、就必须有证据原话包含它的词。分两类：流程/承诺词（麻醉、住院）与身份词（新客、老客）。每个词至少 2 字；不要放行业常用词（价格、方案）。留空则该项校验关闭。",
+      "items": {
+        "type": "string",
+        "minLength": 2
+      }
+    },
+    "completion_words": {
+      "type": "array",
+      "description": "「这个词一出现，就说明某档交易已经发生」。第二个元素只能是 payment / appointment / treatment；拼错会让该检查静默失效，因此由 validateDraft 强校验。",
+      "items": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "prefixItems": [
+          { "type": "string", "minLength": 2 },
+          { "type": "string", "enum": ["payment", "appointment", "treatment"] }
+        ],
+        "items": false
+      }
+    },
+    "post_action_words": {
+      "type": "array",
+      "description": "事情尚未发生（transaction.treatment=unknown）时，不得出现在对客话术里的后续安排词，如后续安排、回访、恢复期。",
+      "items": {
+        "type": "string",
+        "minLength": 2
+      }
+    },
+    "required_question_topics": {
+      "type": "array",
+      "description": "成交前必须问清、但销售经常漏问的事项。项目里凡未在转录中出现，都要写进 unknowns。",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "medical_review_topic": {
+      "type": "string",
+      "description": "须由专业人员书面回答的问题在页面上的分组标题（字段名为历史遗留，语义为「专业复核」）。"
+    },
+    "page": {
+      "type": "object",
+      "description": "页面固定文案。",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "transaction_keys": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "decision_stages": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "project_statuses": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "client_fact_states": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "labels": {
+      "type": "object"
+    }
+  },
+  "patternProperties": {
+    "^_": {
+      "description": "下划线开头的注释键，允许任意内容。"
+    }
+  }
+}

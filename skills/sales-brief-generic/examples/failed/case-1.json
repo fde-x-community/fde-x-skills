@@ -1,0 +1,36 @@
+{
+  "name": "failed-no-agent-step-and-quote-fabrication",
+  "observed_failure": "第一版把语义分析完全留给会话里的模型，skill 自己只有一个 script 节点：换一个会话、换一个模型，就没有任何东西保证它会先索引、再按数据契约写 analysis、再跑校验。实际后果是模型直接把「看起来像简报」的结论交出来，quote 用原文没有的措辞（把「我先不交钱」改写成「我已经付款」），把合并话轮里的句子当成客户亲口确认，H5 上看不出差别，销售据此跳过核实。",
+  "root_cause": [
+    "执行链里没有 agent 节点：语义步骤只是文档里的建议，不是状态机里的一个状态，谁执行、交什么、错了怎么办都没有约束。",
+    "没有节点级提交契约：agent 产出的结构不受 outputSchema 约束，也不存在「不合格打回重做」的机制。",
+    "quote 只校验非空，不校验是否为对应话轮的连续子串；角色状态没有阻止 stated 引用 mixed/unknown 证据。"
+  ],
+  "repair": [
+    "声明三个节点：index（script）、extract（agent，outputSchema 锁住 analysis 结构）、render（script，input 取自 extract 的提交）。",
+    "extract 的提交由 render 节点用 validateAnalysis 机械校验：不合格以 status=needs_revision + 逐条错误清单随 run 一起交回（不打回节点、不停在 blocked），由主 agent 决定重跑还是转人工。",
+    "quote 改为严格连续子串比对；status=stated 不得引用 mixed/unknown 证据；transaction 标 verified 必须给凭证描述。",
+    "H5 顶部固定展示「内部分析草稿 · 建议尚未执行 · 需人工复核」，证据折叠展示而不是省略。"
+  ],
+  "regression_case": [
+    "tests/run.test.mjs: 编造原话被拦下",
+    "tests/run.test.mjs: 混杂角色不能写成客户表达",
+    "tests/run.test.mjs: verified 缺凭证被拦下",
+    "tests/run.test.mjs: render 阶段校验不通过时不渲染 H5"
+  ],
+  "forbidden_behavior": [
+    "把机械校验通过说成语义、医学或客户授权已核实。",
+    "再次交出「只有 script 节点、语义靠自觉」的版本。"
+  ],
+  "money_math": [],
+  "not_found_claims": [
+    {
+      "claim": "客户没有说明具体跟谁商量",
+      "keywords": [
+        "商量"
+      ],
+      "evidence_id": "E3",
+      "note": "「商量」这个动作有原话，但对象从未出现；引用 E3 证明已核过该话轮"
+    }
+  ]
+}

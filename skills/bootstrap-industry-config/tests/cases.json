@@ -1,0 +1,134 @@
+[
+  {
+    "name": "index-node-index-only",
+    "input": {
+      "transcripts": [
+        {
+          "session_id": "S1",
+          "path": "examples/fixtures/synthetic.txt"
+        }
+      ],
+      "out_dir": "out/SYN-01"
+    },
+    "expected_output": {
+      "status": "index_only",
+      "sessions": [
+        {
+          "session_id": "S1",
+          "turns": 7,
+          "unparsed_lines": 1,
+          "index_path": "out/SYN-01/S1.index.json",
+          "segments_path": "out/SYN-01/S1.segments.md",
+          "segments": 1
+        }
+      ],
+      "config_path": "",
+      "report_path": "",
+      "execution_status": "no_action_executed"
+    }
+  },
+  {
+    "name": "check-node-drafted",
+    "input": {
+      "transcripts": [
+        {
+          "session_id": "S1",
+          "path": "examples/fixtures/synthetic.txt"
+        }
+      ],
+      "out_dir": "out/SYN-02",
+      "industry_name": "课程顾问",
+      "draft": {
+        "industry_terms": ["定金", "分期", "手续费", "名额"],
+        "completion_words": [["已付清", "payment"]],
+        "post_action_words": [],
+        "required_question_topics": ["预算与支付方式", "决策人与陪同人", "退费政策", "开课时间"]
+      }
+    },
+    "expected_output": {
+      "status": "drafted",
+      "sessions": [
+        {
+          "session_id": "S1",
+          "turns": 7
+        }
+      ],
+      "config_path": "out/SYN-02/industry-config.draft.json",
+      "report_path": "out/SYN-02/bootstrap-report.md",
+      "execution_status": "no_action_executed"
+    }
+  },
+  {
+    "name": "check-node-needs-revision-on-bad-draft",
+    "input": {
+      "transcripts": [
+        {
+          "session_id": "S1",
+          "path": "examples/fixtures/synthetic.txt"
+        }
+      ],
+      "out_dir": "out/SYN-03",
+      "draft": {
+        "industry_terms": ["价"],
+        "completion_words": [],
+        "required_question_topics": []
+      }
+    },
+    "expected_output": {
+      "status": "needs_revision",
+      "sessions": [
+        {
+          "session_id": "S1",
+          "turns": 7
+        }
+      ],
+      "config_path": "out/SYN-03/industry-config.draft.json",
+      "report_path": "out/SYN-03/bootstrap-report.md",
+      "execution_status": "no_action_executed"
+    }
+  },
+  {
+    "name": "fault-missing-out_dir",
+    "input": {
+      "transcripts": [
+        {
+          "session_id": "S1",
+          "path": "examples/fixtures/synthetic.txt"
+        }
+      ]
+    },
+    "expect": "failure"
+  },
+  {
+    "name": "fault-missing-transcripts",
+    "input": {
+      "out_dir": "out/SYN-01"
+    },
+    "expect": "failure"
+  },
+  {
+    "name": "fault-empty-transcripts",
+    "input": {
+      "transcripts": [],
+      "out_dir": "out/SYN-01"
+    },
+    "expect": "failure"
+  },
+  {
+    "name": "fault-duplicate-session-id",
+    "input": {
+      "transcripts": [
+        {
+          "session_id": "S1",
+          "path": "examples/fixtures/synthetic.txt"
+        },
+        {
+          "session_id": "S1",
+          "path": "examples/fixtures/synthetic.txt"
+        }
+      ],
+      "out_dir": "out/SYN-01"
+    },
+    "expect": "failure"
+  }
+]

@@ -1,0 +1,225 @@
+{
+  "schema_version": "2.0",
+  "case_id": "SYN-01",
+  "summary": "对话中出现眼部项目和自然效果的兴趣；顾问口头估计两万左右、说明以正式报价为准，费用与家庭商量是当前重点，付款状态未核实。",
+  "decision_stage": "consideration",
+  "contact_policy": "unknown",
+  "contact_note": "后续联系许可尚未确认；建议话术仅作取得许可后的参考。",
+  "transaction": {
+    "payment": "unknown",
+    "appointment": "unknown",
+    "treatment": "unknown"
+  },
+  "money_math": [],
+  "not_found_claims": [
+    {
+      "claim": "客户没有说明具体跟谁商量",
+      "keywords": [
+        "商量"
+      ],
+      "evidence_id": "E3",
+      "note": "「商量」这个动作有原话，但对象从未出现；引用 E3 证明已核过该话轮"
+    }
+  ],
+  "transaction_evidence": {},
+  "evidence": [
+    {
+      "id": "E1",
+      "session_id": "S1",
+      "turn_id": "L3@00:00:05",
+      "quote": "我想先了解眼部，效果自然一点。",
+      "role": "客户候选",
+      "role_status": "candidate"
+    },
+    {
+      "id": "E2",
+      "session_id": "S1",
+      "turn_id": "L5@00:00:20",
+      "quote": "如果太贵我需要回家商量。",
+      "role": "客户候选",
+      "role_status": "candidate"
+    },
+    {
+      "id": "E3",
+      "session_id": "S1",
+      "turn_id": "L7@00:00:35",
+      "quote": "我先不交钱，回家商量好了再说。",
+      "role": "客户候选",
+      "role_status": "candidate"
+    },
+    {
+      "id": "E4",
+      "session_id": "S1",
+      "turn_id": "L6@00:00:28",
+      "quote": "刚才口头估计两万左右，最终以正式报价为准。",
+      "role": "咨询顾问候选",
+      "role_status": "candidate"
+    }
+  ],
+  "profiles": [
+    {
+      "title": "优先了解眼部，偏好自然效果",
+      "text": "发言人2表达希望先了解眼部和自然效果；其客户身份基于上下文推测，待确认。",
+      "status": "stated",
+      "evidence_ids": [
+        "E1"
+      ],
+      "kb_refs": [
+        "K1"
+      ],
+      "kb_excerpts": [
+        {
+          "id": "K1",
+          "quote": "示例项目的原理说明：先评估适用性，再确定方案。",
+          "used_for": "优先了解眼部，偏好自然效果"
+        }
+      ],
+      "term_status": "confirmed",
+      "kb_term": "示例项目"
+    }
+  ],
+  "timeline": [
+    {
+      "title": "从了解方案转向费用与家庭商量",
+      "text": "在询问费用后，发言人2表示先不交钱、回家商量；仅描述本次对话。",
+      "status": "stated",
+      "evidence_ids": [
+        "E1",
+        "E2",
+        "E3"
+      ]
+    }
+  ],
+  "barriers": [
+    {
+      "title": "费用和家庭商量",
+      "text": "发言人2表示价格过高时需要回家商量；可接受的具体金额未知。",
+      "status": "stated",
+      "evidence_ids": [
+        "E2",
+        "E3"
+      ],
+      "kb_refs": [
+        "K2"
+      ],
+      "kb_excerpts": [
+        {
+          "id": "K2",
+          "quote": "口头估计不是正式价格：正式报价必须写清包含项、有效期与出价主体。",
+          "used_for": "费用和家庭商量"
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "title": "整理正式费用说明",
+      "content": "内部核实项目及报价包含项，准备书面费用说明。",
+      "purpose": "帮助比较费用并避免口头估价被当作最终价格。",
+      "condition": "先由有权限的人员核实项目与报价。",
+      "script": "",
+      "owner": "报价负责人",
+      "done_when": "项目和费用包含项有可追溯记录，未核实项明确列出。",
+      "scope": "internal",
+      "evidence_ids": [
+        "E2",
+        "E3"
+      ]
+    },
+    {
+      "title": "尊重商量节奏",
+      "content": "在允许联系的范围内，询问是否需要书面说明，不催促付款。",
+      "purpose": "让对方自主决定是否继续了解。",
+      "condition": "先取得本人对联系渠道和目的的明确许可。",
+      "script": "您之前提到想先和家人商量；如果您需要，我可以整理一份费用说明供您参考。",
+      "owner": "咨询人员",
+      "done_when": "记录对方是否需要资料及其选择，不以发出信息冒充确认。",
+      "scope": "contact",
+      "evidence_ids": [
+        "E3"
+      ]
+    }
+  ],
+  "oral_quotes": [
+    {
+      "item": "眼部项目",
+      "amount": "两万左右",
+      "by": "咨询顾问",
+      "note": "顾问自述为口头估计，并说明最终以正式报价为准",
+      "evidence_ids": [
+        "E4"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "unknowns": [
+    {
+      "item": "正式报价与项目包含项",
+      "why": "转录内只有口头估计两万左右，未见正式报价单；须取得书面报价后确认。"
+    },
+    {
+      "item": "付款与预约状态",
+      "why": "客户明确表示先不交钱、回家商量，未见任何收款或预约凭证。"
+    }
+  ],
+  "projects": [
+    {
+      "name": "眼部项目",
+      "status": "exploring",
+      "note": "客户主动提出想先了解眼部",
+      "evidence_ids": [
+        "E1"
+      ]
+    }
+  ],
+  "client_facts": [
+    {
+      "item": "付款安排",
+      "value": "先不交钱，回家商量",
+      "state": "likely_client",
+      "evidence_ids": [
+        "E3"
+      ]
+    },
+    {
+      "item": "决策人",
+      "state": "unknown",
+      "note": "客户提到回家商量，但未说明与谁商量"
+    }
+  ],
+  "medical_review_questions": [
+    {
+      "question": "该客户眼部项目的适应证与方案由谁确认？",
+      "why": "转录内顾问已说明具体适用性要请医生评估，未出现医生结论",
+      "evidence_ids": []
+    }
+  ],
+  "analysis_meta": {
+    "coverage": "full",
+    "turns_read": 6,
+    "sessions": 1,
+    "limitations": [
+      "合成样例（非真实客户）",
+      "发言人身份未听音频确认，全部为角色候选"
+    ]
+  },
+  "kb_gaps": [
+    {
+      "topic": "品牌型号对照",
+      "why_missing": "示例知识库只有项目卡，没有「品牌—型号—价格」对照卡",
+      "fallback": "交医生或机构书面资料；只做项目层解释，不给品牌排序",
+      "must_not_use_cards": [
+        "K3"
+      ],
+      "evidence_turns": [
+        "L5@00:00:20"
+      ]
+    }
+  ],
+  "input_binding": {
+    "kb_fingerprint": "4d4c34af79993b93",
+    "transcripts": {
+      "S1": "22723a48c782add967e3f5c3309a658919c8a7e8da82a42b3d40427624362885"
+    }
+  }
+}

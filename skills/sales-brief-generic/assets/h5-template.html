@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>销售咨询简报</title>
+<style>
+:root{color-scheme:light;--green:#19473b;--pale:#eff4e7;--line:#dfe7de;--ink:#1c3029;--muted:#60736a}
+*{box-sizing:border-box}
+body{margin:0;background:#f5f6f1;color:var(--ink);font:15px/1.7 system-ui,-apple-system,"Microsoft YaHei",sans-serif}
+.wrap{max-width:1080px;margin:auto;padding:24px}
+header{background:var(--green);color:#fff;border-radius:18px;padding:24px}
+header h1{margin:0 0 10px;font-size:25px;letter-spacing:.5px}
+.lede{margin:0;font-size:15px;line-height:1.75;color:#e8f0e6}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.pill{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.28);border-radius:14px;padding:3px 11px;font-size:13px;white-space:nowrap}
+.meta{margin:12px 0 0;font-size:12px;color:#c3d5c6}
+.notice{background:#fff5dd;border:1px solid #eed397;border-radius:12px;padding:11px 14px;margin:16px 0;font-size:13px}
+.basis{border-radius:12px;padding:10px 14px;margin:16px 0;font-size:13px;line-height:1.7}
+.basis-warn{background:#fdecec;border:1px solid #d4574f;color:#7d2a24}
+.vfail,.vwarn{border-radius:14px;padding:14px 16px;margin:10px 0}
+.vfail{background:#fdecec;border:1px solid #e8b4ae}
+.vwarn{background:#fff5dd;border:1px solid #eed397}
+.vres{background:#f4f1fb;border:1px solid #cfc5e8;border-radius:14px;padding:14px 16px;margin:10px 0}
+.vfail h2,.vwarn h2,.vres h2{margin:0 0 8px;font-size:15px;line-height:1.5}
+.vfail h2{color:#8d2b24}
+.vwarn h2{color:#7a5a11}
+.vres h2{color:#4a3a7a}
+.vfail ol,.vwarn ol{margin:8px 0 0;padding-left:20px;font-size:13px}
+.vfail ol li,.vwarn ol li{margin:5px 0}
+.vres ul{margin:8px 0 0;padding-left:20px;font-size:13px}
+.vres ul li{margin:5px 0}
+details.vpanel{margin:26px 0 6px;background:#fafaf6;border:1px solid var(--line);border-radius:14px;font-size:13px;color:var(--muted)}
+details.vpanel>summary{list-style:none;cursor:pointer;padding:11px 16px;font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:8px}
+details.vpanel>summary::-webkit-details-marker{display:none}
+details.vpanel>summary::before{content:"▸ "}
+details.vpanel[open]>summary::before{content:"▾ "}
+details.vpanel>summary:hover{color:#3c5a4c}
+details.vpanel>.vpanel-body{padding:2px 16px 16px}
+.brief{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin:18px 0}
+.brief h2{margin:0 0 14px;font-size:19px}
+.brief .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:14px}
+.brief article{background:#fafbf7;border:1px solid var(--line);border-radius:12px;padding:14px}
+.brief article h3{margin:0 0 9px;font-size:15px;color:#2b5a45}
+.brief ol{margin:0;padding-left:18px}
+.brief ol li{margin:5px 0}
+.brief .contact{margin:14px 0 0;font-size:13px;color:var(--muted)}
+nav{position:sticky;top:0;z-index:30;display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;margin:0 0 18px;padding:9px 11px;background:linear-gradient(180deg,#1e5346,#19473b);border-radius:14px;box-shadow:0 12px 22px -14px rgba(25,71,59,.75),inset 0 1px 0 rgba(255,255,255,.09);scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav a{color:#cfe0d2;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:6px 14px;font-size:13px;line-height:1.5;text-decoration:none;white-space:nowrap;flex:0 0 auto;transition:background .16s ease,color .16s ease,border-color .16s ease}
+nav a:hover{background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.3)}
+nav a.on{background:#fff;color:var(--green);border-color:#fff;font-weight:700;box-shadow:0 3px 10px rgba(0,0,0,.22)}
+.brief{scroll-margin-top:84px}
+details.sect{background:#fff;border:1px solid var(--line);border-radius:16px;margin:14px 0;overflow:hidden;scroll-margin-top:84px}
+details.sect>summary{list-style:none;cursor:pointer;padding:15px 18px;font-size:18px;font-weight:700;color:#204d3d;display:flex;align-items:center;gap:10px}
+details.sect>summary::-webkit-details-marker{display:none}
+details.sect>summary .cnt{font-size:12px;font-weight:400;color:var(--muted);background:var(--pale);border-radius:10px;padding:1px 8px}
+details.sect>summary .hint{margin-left:auto;font-size:12px;font-weight:400;color:var(--muted)}
+details.sect[open]>summary{border-bottom:1px solid var(--line)}
+details.sect>.body{padding:16px 18px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:12px}
+article.card{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}
+article.card h3{font-size:16px;margin:5px 0 8px;line-height:1.5}
+article.card p{margin:7px 0}
+.tag{font-size:12px;color:#315a42;background:var(--pale);border-radius:12px;padding:2px 9px;white-space:nowrap}
+ol.tl{list-style:none;margin:0;padding:0}
+ol.tl>li{border-top:1px solid var(--line);padding:9px 0}
+ol.tl>li:first-child{border-top:0;padding-top:0}
+ol.tl>li>b{font-size:15px;color:#204d3d}
+ol.tl details{margin-top:6px}
+ul.plain{list-style:none;margin:0;padding:0}
+ul.plain>li{border-top:1px solid var(--line);padding:10px 0}
+ul.plain>li:first-child{border-top:0;padding-top:0}
+details.ev{margin-top:9px}
+details.ev>summary{cursor:pointer;font-size:12.5px;color:#2f6b52;list-style:none}
+details.ev>summary::-webkit-details-marker{display:none}
+details.ev>summary::before{content:"▸ ";}
+details.ev[open]>summary::before{content:"▾ ";}
+blockquote{margin:9px 0 0;padding:4px 12px;border-left:3px solid #a4bc83;background:#f8faf6;font-size:14px}
+blockquote small{display:block;margin-top:4px;color:var(--muted);font-size:12px}
+.empty{color:var(--muted);margin:0}
+.kb-basis{margin:0 0 10px;padding:8px 12px;border-radius:8px;background:#eef4ea;border:1px solid #cfe0c4;font-size:13px;line-height:1.6}
+.kb-basis.muted{background:#f4f4f1;border-color:#e2e2da;color:var(--muted)}
+footer{font-size:12px;color:var(--muted);margin:26px 0;line-height:1.8}
+@media(max-width:600px){.wrap{padding:12px}header{padding:18px}header h1{font-size:21px}details.sect>.body{padding:14px}article.card{padding:13px}}
+@media print{details.sect{break-inside:avoid}nav{display:none}}
+</style>
+</head>
+<body>
+<main class="wrap">
+{{INDUSTRY_BASIS}}
+{{KB_BANNER}}
+<header>
+  <h1>{{CASE_TITLE}} · 销售咨询简报</h1>
+  <p class="lede">{{SUMMARY}}</p>
+  <div class="pills">
+    <span class="pill">意向阶段 {{STAGE}}</span>
+    <span class="pill">支付 {{PAYMENT}}</span>
+    <span class="pill">预约 {{APPOINTMENT}}</span>
+    <span class="pill">治疗 {{TREATMENT}}</span>
+  </div>
+  <p class="meta">{{META}}</p>
+</header>
+
+<div class="notice">{{PAGE_NOTICE}}</div>
+
+<nav>{{NAV}}</nav>
+
+<section class="brief" id="brief">
+  <h2>一页速览</h2>
+  <div class="cols">
+    <article><h3>卡在哪</h3>{{BRIEF_BARRIERS}}</article>
+    <article><h3>下一步做什么</h3>{{BRIEF_ACTIONS}}</article>
+  </div>
+  <p class="contact"><b>联系许可：</b>{{CONTACT}}</p>
+</section>
+
+{{SECTIONS}}
+
+<footer>{{PAGE_FOOTER}}</footer>
+
+{{VALIDATION_BANNER}}
+</main>
+<script>
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav a'));
+  links.forEach(function (link) {
+    link.addEventListener('click', function (event) {
+      var target = document.querySelector(link.getAttribute('href'));
+      if (!target) return;
+      event.preventDefault();
+      if (target.tagName === 'DETAILS') target.open = true;
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      links.forEach(function (other) { other.classList.remove('on'); });
+      link.classList.add('on');
+    });
+  });
+  // 吸顶后高亮当前所在模块：以视口上部 20%～58% 作为判定带
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        links.forEach(function (link) {
+          link.classList.toggle('on', link.getAttribute('href') === '#' + entry.target.id);
+        });
+      });
+    }, { rootMargin: '-20% 0px -58% 0px' });
+    Array.prototype.forEach.call(document.querySelectorAll('.brief, details.sect'), function (node) {
+      if (node.id) observer.observe(node);
+    });
+  }
+})();
+</script>
+</body>
+</html>

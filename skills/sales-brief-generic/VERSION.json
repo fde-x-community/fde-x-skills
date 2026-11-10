@@ -1,0 +1,54 @@
+{
+  "schema_version": "skill_release_v2",
+  "skill_name": "sales-brief-generic",
+  "version": "0.8.1",
+  "release_date": "2026-11-05",
+  "status": "draft",
+  "author": "weiweiweizizi",
+  "reviewer": "",
+  "review_basis": "",
+  "anatomy_version": "strict_full_v1",
+  "source_episode": "行业无关的销售咨询简报 skill：把咨询录音转录索引成可逐字回溯的话轮，由 agent 节点做语义分析，再由脚本机械校验并渲染离线内部简报 H5，支持可选接入企业行业知识库。开发过程中在一个真实咨询场景上反复迭代（多会话转录、117 条行业知识条目、85 个术语），把人工复盘发现的错误逐条改成机械拦截。",
+  "design_basis": [
+    "旧版本 verification.regression 记录 75 项 node:test 回归全绿（run.test.mjs 60 + kb.test.mjs 15，Node 24），含 3 条 CLI 子进程用例：index 按 argv 执行、render 用 fromNode 提交物、违约输入退出码 2。",
+    "旧版本 verification.mutation_suite 记录 17 类坏输出与 12 类知识库反例全部被拒或被明确降级，覆盖引用不存在卡片、片段不在卡片正文、used_for 不是正文子串、缺口缺 evidence_turns、input_binding 不一致等。",
+    "旧版本 verification.real_data_run 记录 117 条知识条目 / 85 个术语 + 真实咨询转录的跑通验证（知识库指纹 bd5b09d4 开头），index 命中 23 话轮，render 得到 status=rendered 且零外链。",
+    "旧版本 verification.config_extraction_equivalence 记录行业配置抽出前后对三份真实稿的 validateAnalysis 结果一致。",
+    "旧版本 verification.latest 记录 81 项测试全绿（run.test.mjs 60 + kb.test.mjs 21，未含 contract.test.mjs 的 5 项契约用例），作为本次打包前的最后一次完整回归；本次 test-all 枚举三个测试文件实测 86 项（含 contract 5 项）0 失败，测试代码未改动。",
+    "本次改造已用 node scripts/validate.mjs、node scripts/test-all.mjs 与 node scripts/build-index.mjs 本地复核（Node v24.14.0），README.md / README.en.md 的索引入口随本改动一并重新生成。",
+    "设计取舍：分段通读只降低漏读概率；机械层能强制的只有 analysis_meta.turns_read 等于索引话轮数，不能证明每一段都被真读过，兜底仍是逐条话轮证据加人审。",
+    "设计取舍：校验不通过时照样渲染页面（核对清单置顶、问题折叠在页底），不做「打回重做」门禁——反复拒绝会让 run 停在不可回卷的 blocked 终态，批量运行会断链。",
+    "设计取舍：不做成交概率或意向评分，没有校准数据的分数比没有分数更危险；行业词分两档，转录里说过但本条未引到降为提醒，转录里根本没有才拒收。"
+  ],
+  "validation": {
+    "evidence_policy": "This descriptive block is not release evidence; an external content-addressed release manifest is authoritative.",
+    "release_evidence": ""
+  },
+  "evaluation_sets": {
+    "trigger": "tests/scenario-matrix.json#trigger",
+    "non_trigger": "tests/scenario-matrix.json#non_trigger",
+    "quality": "tests/scenario-matrix.json#quality",
+    "safety": "tests/scenario-matrix.json#safety",
+    "regression": "tests/scenario-matrix.json#regression",
+    "end_to_end": "tests/scenario-matrix.json#end_to_end"
+  },
+  "approved_rules": [],
+  "breaking_changes": [],
+  "artifact_maturity": "draft",
+  "change_request_state": "not_created",
+  "release_state": "not_created",
+  "deployment_state": "not_created",
+  "rollback_to": "0.8.0",
+  "rollback_snapshot": "",
+  "rollback_manifest": "",
+  "known_limits": [
+    "只接受 [HH:MM:SS] 发言人：文本 这一种转录格式；其他格式需先转换并人工核对，本 skill 不负责转写。",
+    "机械校验通过只说明结构与引用规则成立，不证明语义正确、医学正确，也不证明客户授权或凭证真实。",
+    "知识库的 kb_excerpts 只能证明某段卡片原文被认为支撑某句结论，不能证明语义蕴含；术语命中是字面匹配，同义词、简称与拼音误写不保证命中。",
+    "页面是内部分析草稿并含敏感资料；证据折叠不等于脱敏或访问控制。",
+    "examples/ 下合成样例的逐条分析由人预先编写，不是程序独立推理。",
+    "三类错误尚未机械化拦截：报价链被称闭合但实际有差额、同一事实被标两种互斥档位、漏收客户主动提出的诉求；需要语义判断，只能靠人审。",
+    "行业配置是可选项：按通用词表出稿时行业词校验关闭，结论中不得声称已做行业适配。",
+    "Draft package: no release evidence has been independently re-read."
+  ]
+}

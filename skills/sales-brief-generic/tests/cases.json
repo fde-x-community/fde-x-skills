@@ -1,0 +1,105 @@
+[
+  {
+    "name": "render-node-rendered",
+    "input": {
+      "transcripts": [
+        {
+          "session_id": "S1",
+          "path": "examples/fixtures/synthetic.txt",
+          "sequence": 1,
+          "session_date": "2026-01-01"
+        }
+      ],
+      "out_dir": "out/SYN-01",
+      "case_id": "SYN-01"
+    },
+    "expected_output": {
+      "status": "rendered",
+      "sessions": [
+        {
+          "session_id": "S1",
+          "turns": 6,
+          "unparsed_lines": 1,
+          "index_path": "out/SYN-01/S1.index.json"
+        }
+      ],
+      "h5": "out/SYN-01/销售简报.html",
+      "validation": {
+        "checked": true,
+        "ok": true,
+        "errors": []
+      },
+      "execution_status": "no_action_executed"
+    }
+  },
+  {
+    "name": "index-node-index-only",
+    "input": {
+      "transcripts": [
+        {
+          "session_id": "S1",
+          "path": "examples/fixtures/synthetic.txt"
+        }
+      ],
+      "out_dir": "out/SYN-01"
+    },
+    "expected_output": {
+      "status": "index_only",
+      "sessions": [
+        {
+          "session_id": "S1",
+          "turns": 6,
+          "unparsed_lines": 1,
+          "index_path": "out/SYN-01/S1.index.json"
+        }
+      ],
+      "h5": "",
+      "validation": {
+        "checked": false,
+        "ok": false,
+        "errors": []
+      },
+      "execution_status": "no_action_executed"
+    }
+  },
+  {
+    "name": "fault-missing-out_dir",
+    "input": {
+      "transcripts": [
+        {
+          "session_id": "S1",
+          "path": "examples/fixtures/synthetic.txt"
+        }
+      ]
+    },
+    "expect": "failure"
+  },
+  {
+    "name": "fault-missing-transcripts",
+    "input": {
+      "out_dir": "out/SYN-01"
+    },
+    "expect": "failure"
+  },
+  {
+    "name": "fault-empty-transcripts",
+    "input": {
+      "transcripts": [],
+      "out_dir": "out/SYN-01"
+    },
+    "expect": "failure"
+  },
+  {
+    "name": "fault-session-id-not-filename-safe",
+    "input": {
+      "transcripts": [
+        {
+          "session_id": "S 1",
+          "path": "examples/fixtures/synthetic.txt"
+        }
+      ],
+      "out_dir": "out/SYN-01"
+    },
+    "expect": "failure"
+  }
+]

@@ -1,0 +1,188 @@
+{
+  "_comment": "行业配置：技能包自带的通用模板（永远保持通用，不随行业改动）。真正的行业配置由「行业配置冷启动」产出、留在当前工作目录（<out_dir>/industry-config.json 或 <out_dir>/industry-config/industry-config.draft.json），run.mjs 会优先读取工作目录里的配置；只有找不到时才回落到本文件。",
+  "_schema_version": "industry_config_v1",
+  "_industry": "generic（未适配任何行业）",
+  "_behavior_note": "industry_terms 为空数组 = 不做「机构流程/身份词必须有原话支撑」这项校验；枚举与标签已通用。注意：本文件是通用模板，不要把某个行业的词表写进来——那会破坏通用性；行业词表放工作目录。",
+  "_term_extraction_criteria": [
+    "一个词该不该进 process_terms，问三个问题：①它出现时通常是谁在说（机构 / 客户）；②如果报告里写了它，销售会据此采取什么行动；③如果录音里根本没有它却写了，会造成什么后果。",
+    "只收『一写就构成承诺 / 身份 / 流程断言，因此必须有原话支撑』的词。行业常见但无承诺性质的词（如『价格』『咨询』）不该进。",
+    "宁少勿多：误命中会让每一份稿子无辜被拒，比漏词危险得多。"
+  ],
+  "completion_words": [
+    [
+      "成交",
+      "payment"
+    ],
+    [
+      "已付款",
+      "payment"
+    ],
+    [
+      "已支付",
+      "payment"
+    ],
+    [
+      "已刷卡",
+      "payment"
+    ],
+    [
+      "已转账",
+      "payment"
+    ],
+    [
+      "已预约",
+      "appointment"
+    ],
+    [
+      "已排定",
+      "appointment"
+    ],
+    [
+      "已排台",
+      "appointment"
+    ],
+    [
+      "已约好",
+      "appointment"
+    ],
+    [
+      "已约",
+      "appointment"
+    ],
+    [
+      "已治疗",
+      "treatment"
+    ],
+    [
+      "已注射",
+      "treatment"
+    ],
+    [
+      "已手术",
+      "treatment"
+    ]
+  ],
+  "transaction_keys": [
+    "payment",
+    "appointment",
+    "treatment"
+  ],
+  "decision_stages": [
+    "awareness",
+    "exploration",
+    "comparison",
+    "consideration",
+    "price_blocked",
+    "ready_for_next_step",
+    "verbally_agreed",
+    "opened",
+    "transaction_recorded",
+    "deferred",
+    "declined",
+    "unknown"
+  ],
+  "project_statuses": [
+    "mentioned",
+    "exploring",
+    "comparing",
+    "decided",
+    "declined",
+    "deferred",
+    "done",
+    "unknown"
+  ],
+  "client_fact_states": [
+    "confirmed_by_client",
+    "likely_client",
+    "staff_claim",
+    "unknown"
+  ],
+  "labels": {
+    "stage": {
+      "awareness": "刚了解",
+      "exploration": "摸底项目",
+      "comparison": "比价/比机构",
+      "consideration": "方案讨论",
+      "price_blocked": "卡在价格",
+      "ready_for_next_step": "谈实施条件",
+      "verbally_agreed": "口头同意未开局",
+      "opened": "已开单/已登记",
+      "transaction_recorded": "有正式收款或预约记录",
+      "deferred": "明确延后",
+      "declined": "明确拒绝",
+      "unknown": "无法判断"
+    },
+    "project": {
+      "mentioned": "仅机构提到",
+      "exploring": "客户在了解",
+      "comparing": "比价中",
+      "decided": "已定方案",
+      "declined": "明确不做",
+      "deferred": "明确延后",
+      "done": "本次已完成",
+      "unknown": "无法判断"
+    },
+    "fact_state": {
+      "confirmed_by_client": "客户本人确认",
+      "likely_client": "疑为客户说法（待复听）",
+      "staff_claim": "仅机构说法",
+      "unknown": "未知/未问"
+    },
+    "status": {
+      "stated": "客户表达（角色需结合证据复核）",
+      "other": "他人说法",
+      "inferred": "分析推断",
+      "unknown": "待确认",
+      "pending_confirmation": "归属待复听",
+      "conflict": "存在冲突"
+    },
+    "role": {
+      "confirmed": "身份有依据",
+      "candidate": "角色候选，待确认",
+      "unknown": "角色未知",
+      "mixed": "混合话轮，归属待确认"
+    }
+  },
+  "required_question_topics": [
+    "既往相关经历与已知限制",
+    "预算与支付方式",
+    "决策人与陪同人员",
+    "时间窗与档期约束",
+    "客户已明确的风险与顾虑"
+  ],
+  "medical_review_topic": "须由专业人员书面回答的问题",
+  "page": {
+    "title_suffix": "销售咨询简报",
+    "brief_heading": "一页速览",
+    "brief_barriers": "卡在哪",
+    "brief_actions": "下一步做什么",
+    "notice": "内部分析草稿 · 建议尚未执行 · 原话及角色需人工复核；不构成专业建议或正式交易确认。",
+    "footer": "本页面含敏感信息，仅供授权内部使用。折叠证据不构成脱敏或访问控制。校验通过不等于事实、专业意见或授权已得到人工确认。"
+  },
+  "industry_terms": [],
+  "_completion_note": "完成态词跨行业通用；若有专属表达（房产「已网签」、教培「已排课」）直接补进来",
+  "post_action_words": [
+    "后续安排",
+    "注意事项"
+  ],
+  "_knowledge_base_note": "知识库接入（v0.8.0-kb）：路径与卡片字段名都在这里配，换行业的库结构不同就改这一段，run.mjs 与 kb.mjs 不用动。不配也能跑——知识库本来就是可选项，不接时页面照旧，只是不含任何知识依据。判据是「02_结构化数据/知识条目.jsonl 每行一条、至少有 id」这套企业既定约定；若你的库不是这个形状，改 entry_files / entry_fallback / text_fields。",
+  "knowledge_base": {
+    "label": "行业知识库",
+    "entry_files": [
+      "02_结构化数据/知识条目.jsonl"
+    ],
+    "entry_fallback": "知识条目.*\\.jsonl$",
+    "terms_file": "02_结构化数据/术语与转录纠错词典.json",
+    "text_fields": [
+      "retrieval_text",
+      "content"
+    ],
+    "sections_field": "sections",
+    "title_field": "title",
+    "keywords_field": "keywords",
+    "institution_fact_field": "institution_fact",
+    "review_status_field": "review_status",
+    "decorative_shared_chars": 1,
+    "confusables": []
+  }
+}

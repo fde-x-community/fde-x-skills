@@ -1,0 +1,37 @@
+{
+  "name": "failed-silent-config-and-key-collision",
+  "observed_failure": "第一版 validateDraft 只校验 completion_words 是不是长度为 2 的数组，不校验字段名枚举：把 payment 拼成 paymnet 时它判定合法。配置看着生效，实际这条完成态检查永远匹配不上——报告照样宣称「校验通过」。同一版还不拒收契约外的键，于是把旧版键名 process_terms 照搬过来时，脚本读的却是 industry_terms，配置静默失效而没有任何提示。",
+  "root_cause": [
+    "校验口径比契约窄：schema 与文档里写了字段名枚举，脚本里没实现，规则停在文档层。",
+    "未知键默认放行：换个行业时照抄旧版键名是最常见的迁移错误，而放行等于把「配置生效」变成不可验证的假设。",
+    "没有把「静默失效」当成一类独立故障：报错能被看见，静默失效不能，因此危害更大。"
+  ],
+  "repair": [
+    "validateDraft 引入 COMPLETION_FIELDS 常量做枚举比对，错误文案直接列出允许的三种取值并回显收到的值。",
+    "契约外的键一律拒收（下划线开头的注释键除外），错误文案列出全部允许的键。",
+    "关键词长度下界设为 2 字并拒收单字：单字命中率高得离谱，进表等于把校验变成随机拒绝。"
+  ],
+  "required_response": "任何让配置「看着生效、实际不生效」的形状都必须在校验阶段报错，并配一条回归用例；不接受只在文档里提示。",
+  "regression_case": [
+    "tests/run.test.mjs: completion_words 的字段名拼错时被拒收（否则该检查静默失效）",
+    "tests/run.test.mjs: 契约外的未知键被拒收（防止配置悄悄失效）",
+    "tests/run.test.mjs: 关键词少于两个字时报错（单字会大量误命中）",
+    "tests/scenario-matrix.json: regression-1 记录了口径"
+  ],
+  "forbidden_behavior": [
+    "为了兼容旧键名而同时接受 process_terms 与 industry_terms（会造成两份配置互相矛盾时无法判断谁生效）。",
+    "把字段名枚举写进文档就算完事，不在脚本里实现。"
+  ],
+  "additional_failures": [
+    {
+      "name": "单字关键词",
+      "draft": {
+        "industry_terms": ["价"],
+        "completion_words": [],
+        "required_question_topics": []
+      },
+      "expected_error_contains": "太短或空",
+      "cause": "「价」会命中「房价」「比价」「价钱」，单字进表等于随机拒绝。"
+    }
+  ]
+}
