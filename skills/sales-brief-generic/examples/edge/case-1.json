@@ -1,0 +1,30 @@
+{
+  "name": "edge-agent-retry-budget-and-unparsed-body",
+  "case_type": "提交被拒后重试 + 多会话归属 + 未解析正文",
+  "input_class": "同一客户两次咨询（S1/S2）分别索引；索引里存在非标题性质的未解析行；agent 交的 analysis 引用了改写过的原话",
+  "expected_behavior": [
+    "extract 提交的不是 JSON 对象时，运行时按 outputSchema 拒绝并重试（信封是唯一会消耗 retry 预算的层）；提交是对象但 analysis 引文被改写时**不打回**，由 render 判 needs_revision 并让 run 正常结束，逐条错误进 output.validation.errors 与 <out_dir>/校验结果.json。",
+    "同一客户多次咨询必须用不同 session_id 分别索引；跨会话引用报「指向不存在的会话或话轮」。",
+    "索引里出现非标题性质的未解析正文行时，render 阶段校验失败并指出是哪一行，不能静默跳过或把它当标题。",
+    "contact_policy 为 unknown/restricted 时，scope=contact 的行动必须在执行条件里写明取得许可；stop_all 时不允许出现对客任务。",
+    "校验失败只产出 needs_revision 且不生成 H5，不为了通过而改写原话。",
+    "任何 run 都必须以 succeeded 或 failed 结束，不得停在 blocked。"
+  ],
+  "forbidden_behavior": [
+    "把不同会话的原话混进同一条证据，或为了让引用通过而改动 quote。",
+    "把未解析正文行当成标题略过，然后宣称已完成全量分析。",
+    "在校验失败后仍然渲染 H5，或把 needs_revision 报成 rendered。",
+    "用脚本或索引冒充语义分析结果，跳过 extract 节点直接交页面。"
+  ],
+  "money_math": [],
+  "not_found_claims": [
+    {
+      "claim": "客户没有说明具体跟谁商量",
+      "keywords": [
+        "商量"
+      ],
+      "evidence_id": "E3",
+      "note": "「商量」这个动作有原话，但对象从未出现；引用 E3 证明已核过该话轮"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "name": "edge-legal-but-boundary-config",
+  "case_type": "合法边界：恰好 2 字的词 + 空完成态列表 + 单项必问",
+  "input_class": "草案贴着下界：industry_terms 只有一个恰好 2 字的词，completion_words 与 post_action_words 都为空数组，required_question_topics 只有一项",
+  "input": {
+    "transcripts": [
+      {
+        "session_id": "S1",
+        "path": "examples/fixtures/synthetic.txt"
+      }
+    ],
+    "out_dir": "out/EDGE-01",
+    "draft": {
+      "industry_terms": ["定金"],
+      "completion_words": [],
+      "post_action_words": [],
+      "required_question_topics": ["预算"]
+    }
+  },
+  "expected_behavior": [
+    "validateDraft 返回空错误数组，status=drafted：恰好 2 字属合法下界，空数组合法。",
+    "完成态检查仍靠通用版内置默认词覆盖已付款/已预约/已治疗，不因为配置为空而失效。",
+    "报告照常列出逐词出现次数（定金 3），并保留「0 次有两种相反解读」那段说明——边界配置不改变报告口径。"
+  ],
+  "forbidden_behavior": [
+    "把空数组当成配置错误拒收，或用 needs_revision 逼人补齐词表。",
+    "把「该项校验已关闭」在报告里写成「该项校验已通过」。",
+    "因为词表只有一个词就跳过 dry-run 统计。"
+  ],
+  "consequences_to_know": [
+    "industry_terms 为空 → 「行业词必须有原话支撑」这项校验整体关闭，报告不会有任何相关拦截。这是显式设计，不是故障。",
+    "required_question_topics 只有一项时，其余事项不会被要求进入 unknowns。"
+  ],
+  "acceptance_evidence": [
+    "tests/run.test.mjs: 合法草案零错误（覆盖 2 字词与空数组组合）",
+    "tests/run.test.mjs: 关键词少于两个字时报错（证明 2 字是下界而非随意值）"
+  ]
+}

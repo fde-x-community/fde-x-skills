@@ -1,0 +1,54 @@
+{
+  "name": "golden-three-node-run",
+  "input_class": "单会话合成转录 + agent 节点按契约产出的 analysis",
+  "input": {
+    "transcripts": [
+      {
+        "session_id": "S1",
+        "path": "examples/fixtures/synthetic.txt",
+        "sequence": 1,
+        "session_date": "2026-01-01"
+      }
+    ],
+    "out_dir": "out/SYN-01",
+    "case_id": "SYN-01"
+  },
+  "expected_behavior": [
+    "index 节点：索引出 6 个话轮，首行「合成示例（非真实客户）」作为可能的标题留在 unparsed_lines 里（possible_title=true），输出 status=index_only。",
+    "extract 节点：agent 读 <out_dir>/S1.index.json，按分析指南与数据契约产出 analysis，提交 { analysis }；节点只校验信封，内容由 render 判定。",
+    "render 节点：再跑一次同一套 validateAnalysis，零错误后渲染 销售简报.html，输出 status=rendered、execution_status=no_action_executed。",
+    "H5 里每条结论都能展开看到原话、会话代号、时间戳、发言人标签与角色候选状态。"
+  ],
+  "acceptance": {
+    "status": "rendered",
+    "validation.ok": true,
+    "sessions[0].turns": 6,
+    "sessions[0].unparsed_lines": 1,
+    "h5_contains": [
+      "执行条件",
+      "查看依据",
+      "内部处理，不提供对客话术"
+    ],
+    "workflow_nodes": [
+      "index",
+      "extract",
+      "render"
+    ]
+  },
+  "acceptance_evidence": [
+    "tests/run.test.mjs: 黄金样例通过机械校验并渲染出可读 H5",
+    "tests/run.test.mjs: render 阶段渲染 H5 并守住输出契约",
+    "tests/run.test.mjs: CLI render 阶段用 fromNode 提交物 + run 输入执行"
+  ],
+  "money_math": [],
+  "not_found_claims": [
+    {
+      "claim": "客户没有说明具体跟谁商量",
+      "keywords": [
+        "商量"
+      ],
+      "evidence_id": "E3",
+      "note": "「商量」这个动作有原话，但对象从未出现；引用 E3 证明已核过该话轮"
+    }
+  ]
+}

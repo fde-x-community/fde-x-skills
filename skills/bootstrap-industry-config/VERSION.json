@@ -1,0 +1,49 @@
+{
+  "schema_version": "skill_release_v2",
+  "skill_name": "bootstrap-industry-config",
+  "version": "0.3.0",
+  "release_date": "2026-11-05",
+  "status": "draft",
+  "author": "weiweiweizizi",
+  "reviewer": "",
+  "review_basis": "",
+  "anatomy_version": "strict_full_v1",
+  "source_episode": "从真实行业对话转录冷启动行业配置的受控状态机：v0.1 三节点（index 切话轮 → bootstrap 按三个判据抽词 → check 校验并统计真实命中），v0.2 增加多轮收敛（带上一轮 draft 与业务方 answers 续跑，历史只追加 dialog.jsonl，索引按转录 SHA-256 幂等复用），v0.2.1 把产物留在运行目录由通用版自动发现，v0.3.0-kb 增加知识库对齐三段（kb-scan 盘点 → kb-align 定映射 → kb-apply 落统一格式）。本次改造把 skill 包升级为 fde-x-skills 的 strict_full 十二层结构，脚本与测试行为不变。",
+  "design_basis": [
+    "三个真实样例在旧记录中记为 C1/C2/C3：三份不同行业的真实咨询转录，未随包发布，本文件只引用统计结果，不引用任何原文。",
+    "回归：旧版本 verification.regression 记录 30 项、verification.latest 记录 38 项（run.test.mjs 30 + kb.test.mjs 8，未含 contract.test.mjs 的 5 项契约用例）；本次 test-all 枚举三个测试文件，在 Node v24.14.0 实测 43 项（含 contract 5 项）0 失败，测试代码未改动。",
+    "真实转录 C2：876 话轮 / 1 行未解析 / 9 段分段稿；bootstrap 产出 21 词，check 统计 21 个词全部至少命中 1 话轮，零个「从未出现」。",
+    "冷启动召回：对照人工整理的 14 词表，重合 5 个；人工词表另有 9 个词在本次转录里出现次数为 0（人工仍选择保留）；冷启动另提出 16 个人工词表没有的词，多为流程与资质类。",
+    "泛化效果：把冷启动配置装进 sales-brief-generic 跑三个真实样例，C1 拦截 9 条与人工同行业配置完全相同（9/9）；C2、C3 各由 0 条变 3 条，多出的是「正文写了某词但证据原话里没有」的未支撑断言。",
+    "本次改造已用 node scripts/validate.mjs / node scripts/test-all.mjs / node scripts/build-index.mjs 在本地复核（Node v24.14.0，均通过；README 索引表随本改动一并重新生成）。"
+  ],
+  "validation": {
+    "evidence_policy": "This descriptive block is not release evidence; an external content-addressed release manifest is authoritative.",
+    "release_evidence": ""
+  },
+  "evaluation_sets": {
+    "trigger": "tests/scenario-matrix.json#trigger",
+    "non_trigger": "tests/scenario-matrix.json#non_trigger",
+    "quality": "tests/scenario-matrix.json#quality",
+    "safety": "tests/scenario-matrix.json#safety",
+    "regression": "tests/scenario-matrix.json#regression",
+    "end_to_end": "tests/scenario-matrix.json#end_to_end"
+  },
+  "approved_rules": [],
+  "breaking_changes": [],
+  "artifact_maturity": "draft",
+  "change_request_state": "not_created",
+  "release_state": "not_created",
+  "deployment_state": "not_created",
+  "rollback_to": "0.2.1",
+  "rollback_snapshot": "",
+  "rollback_manifest": "",
+  "known_limits": [
+    "换行业要重新冷启动；目前只在少数真实行业样例上跑过，尚未逐行业实测",
+    "C2/C3 多出的 6 条拦截只确认了「规则语义上属未支撑断言」，没有逐条回读正文判断该提及是否属于实质性断言（可能是顺带一提）",
+    "干跑统计只能回答「这个词在这份转录里出现几次」，无法判断一个词该不该拦；0 命中的词需要人判断两种相反解读",
+    "「零出现但危险」的词（防编造词）原理上无法从转录抽出，只能来自事故复盘或业务方补充",
+    "多轮收敛只在合成夹具上验过（30 个用例），尚未在真实转录上跑过完整的 3 轮往返",
+    "Draft package: no release evidence has been independently re-read."
+  ]
+}

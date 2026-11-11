@@ -1,0 +1,149 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "转录索引 <session_id>.index.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "session_id",
+    "sha256",
+    "source_name",
+    "turns",
+    "unparsed_lines"
+  ],
+  "properties": {
+    "session_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "调用方给的会话代号；索引不判断说话人身份。"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "输入转录原始字节的 SHA-256：用来证明索引对应的是哪一份输入。"
+    },
+    "source_name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "输入文件名（只有 basename，不含目录）。"
+    },
+    "turns": {
+      "type": "array",
+      "minItems": 1,
+      "description": "按行序解析出的话轮；原文一字不改，不做语义分析。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "turn_id",
+          "line",
+          "timestamp",
+          "speaker",
+          "text"
+        ],
+        "properties": {
+          "turn_id": {
+            "type": "string",
+            "pattern": "^L[0-9]+@[0-9]{1,2}:[0-9]{2}:[0-9]{2}$",
+            "description": "L<source_line>@<timestamp>；analysis.evidence.turn_id 必须引用它。"
+          },
+          "line": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "原始文件行号（1 起）。"
+          },
+          "timestamp": {
+            "type": "string",
+            "pattern": "^[0-9]{1,2}:[0-9]{2}:[0-9]{2}$"
+          },
+          "speaker": {
+            "type": "string",
+            "minLength": 1,
+            "description": "原发言人标签；不判断其真实身份。"
+          },
+          "text": {
+            "type": "string",
+            "description": "原话正文；evidence.quote 必须是它的连续子串。"
+          },
+          "term_hits": {
+            "type": "array",
+            "description": "仅接入知识库时出现：该话轮命中的知识库术语（只认正确写法，原话不改）",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "term",
+                "offset"
+              ],
+              "properties": {
+                "term": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "offset": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "card": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "normalized_candidate": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "status": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          },
+          "term_suspects": {
+            "type": "array",
+            "description": "仅接入知识库时出现：已知误写提示（来自行业配置 confusables），只提示候选、不改写原文",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      }
+    },
+    "unparsed_lines": {
+      "type": "array",
+      "description": "不符合 [hh:mm:ss] 发言人：文本的行。首两行标 possible_title；其余未解析正文会让校验失败。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "line",
+          "text",
+          "possible_title"
+        ],
+        "properties": {
+          "line": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "text": {
+            "type": "string"
+          },
+          "possible_title": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "kb": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "仅接入知识库时出现：知识库摘要（connected / records / terms / fingerprint / card_hashes / term_hit_turns / term_suspect_turns / conflicts）。未接入时整个字段省略。"
+    }
+  }
+}
